@@ -11,12 +11,12 @@
   --lavender: #F5F2FC;
   --lavender-deep: #ECE6FB;
 
-  --teamA: #5FA83C;
-  --teamA-dark: #4A8A2C;
-  --teamA-light: #EAF5E1;
-  --teamB: #F50087;
-  --teamB-dark: #C70069;
-  --teamB-light: #FFE3F1;
+  --teamA: #18AC87;
+  --teamA-dark: #0F9070;
+  --teamA-light: #DEFBF3;
+  --teamB: #FF6E3D;
+  --teamB-dark: #E05520;
+  --teamB-light: #FFECD6;
 
   --ink: #1A1A2E;
   --gray-1: #6B6B7B;
@@ -117,13 +117,13 @@ html, body {
 .hero-fighter.left .speech { background: var(--teamA); border-bottom-left-radius: 4px; }
 .hero-fighter.right .speech { background: var(--teamB); border-bottom-right-radius: 4px; }
 .fighter-img {
-  width: 100%; aspect-ratio: 1; background: #fff;
+  width: 100%; aspect-ratio: 1;
   border-radius: 28px; padding: 14px; object-fit: contain;
   box-shadow: var(--shadow-card);
   transition: transform 0.12s ease;
 }
-.hero-fighter.left .fighter-img { transform: rotate(-5deg); }
-.hero-fighter.right .fighter-img { transform: rotate(5deg); }
+.hero-fighter.left .fighter-img { transform: rotate(-5deg); background: var(--teamA-light); }
+.hero-fighter.right .fighter-img { transform: rotate(5deg); background: var(--teamB-light); }
 .hero-fighter:active .fighter-img { transform: scale(0.95); }
 .vs-badge {
   font-size: 22px; font-weight: 900; font-style: italic; color: #fff;
@@ -174,9 +174,11 @@ html, body {
   transition: transform 0.15s; position: relative;
 }
 .bf img {
-  width: 80px; height: 80px; border-radius: 20px; object-fit: cover;
+  width: 80px; height: 80px; border-radius: 20px; object-fit: contain; padding: 6px;
   border: 3px solid #fff; box-shadow: 0 2px 10px rgba(43,41,92,0.1);
 }
+.bf.a img { background: var(--teamA-light); }
+.bf.b img { background: var(--teamB-light); }
 .bf.dimmed { opacity: 0.4; filter: grayscale(0.3); }
 .bf.mine img { box-shadow: 0 0 0 2px #fff, 0 6px 18px rgba(43,41,92,0.18); border-color: currentColor; }
 .bf.a.mine { color: var(--teamA); }
