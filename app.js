@@ -192,7 +192,7 @@ const app = {
       <div class="logo-bar">
         <img src="${C.logoLeft}" class="logo" alt="OK캐쉬백 쇼핑">
         <span class="x-sep">×</span>
-        <img src="${C.logoRight}" class="logo" alt="메가MGC커피">
+        <img src="${C.logoRight}" class="logo logo-mega" alt="메가MGC커피">
         <span class="period">${C.period}</span>
       </div>
 
@@ -214,9 +214,8 @@ const app = {
         </div>
 
         <div class="hero-names">
-          <div class="hero-name a">${A.faction}</div>
-          <div class="hero-name-vs">vs</div>
-          <div class="hero-name b">${B.faction}</div>
+          <div class="hero-name a">${A.faction}<span class="hero-product">${A.product}</span></div>
+          <div class="hero-name b">${B.faction}<span class="hero-product">${B.product}</span></div>
         </div>
 
         <div class="hero-question">당신의 파르페 취향은?</div>
@@ -251,7 +250,7 @@ const app = {
         <button class="back-btn" id="backBtn">‹</button>
         <img src="${C.logoLeft}" class="logo" alt="OK캐쉬백 쇼핑">
         <span class="x-sep">×</span>
-        <img src="${C.logoRight}" class="logo" alt="메가MGC커피">
+        <img src="${C.logoRight}" class="logo logo-mega" alt="메가MGC커피">
         <span class="period">${C.period}</span>
       </div>
 
