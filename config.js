@@ -23,6 +23,10 @@ const GAME_CONFIG = {
   promoBadge: "OK pay",
   promoText: "OK캐쉬백 쇼핑 가맹점에서 10배 연타 적용 중",
 
+  // OCB 커머스 스타일 요소
+  cashback: "우승 진영 전원 최대 800P 캐시백",
+  liveLabel: "명이 응원 중",
+
   // 두 진영 — 메가 파르페 A vs B
   teams: {
     A: {
@@ -30,9 +34,9 @@ const GAME_CONFIG = {
       faction: "말차파",
       product: "말차 젤라또 팥빙 파르페",
       brand: "메가MGC커피",
-      imgSrc: "img/mega_1.avif",
-      imgType: "image/avif",
-      imgFallback: "img/mega_1.avif",
+      imgSrc: "img/mega_2.webp",
+      imgType: "image/webp",
+      imgFallback: "img/mega_2.webp",
       emoji: "🍵",
       color: "#5FA83C",
       colorDark: "#4A8A2C",
@@ -47,13 +51,13 @@ const GAME_CONFIG = {
       faction: "팥빙파",
       product: "팥빙 젤라또 파르페",
       brand: "메가MGC커피",
-      imgSrc: "img/mega_2.webp",
-      imgType: "image/webp",
-      imgFallback: "img/mega_2.webp",
+      imgSrc: "img/mega_1.avif",
+      imgType: "image/avif",
+      imgFallback: "img/mega_1.avif",
       emoji: "🍧",
-      color: "#E8506E",
-      colorDark: "#C93A57",
-      colorLight: "#FCE6EC",
+      color: "#F50087",
+      colorDark: "#C70069",
+      colorLight: "#FFE3F1",
       textColor: "#ffffff",
       bubble: "여름엔\n팥빙수지!",
       gongguPrice: "4,900원",

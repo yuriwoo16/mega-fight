@@ -74,6 +74,10 @@ const app = {
     if (segA) segA.style.width = ra + '%';
     if (segB) segB.style.width = rb + '%';
     this.setText('myCount', s.userTapCount.toLocaleString('ko-KR'));
+
+    // 실시간 1위 뱃지
+    const r1a = document.getElementById('rank1A'), r1b = document.getElementById('rank1B');
+    if (r1a && r1b) { r1a.style.display = a >= b ? '' : 'none'; r1b.style.display = a >= b ? 'none' : ''; }
   },
 
   setText(id, v) { const e = document.getElementById(id); if (e) e.textContent = v; },
@@ -181,12 +185,18 @@ const app = {
 
   introHTML() {
     const A = C.teams.A, B = C.teams.B;
+    const s = this.engine.getGameState();
+    const live = (12000 + Math.floor(Math.random()*4000)).toLocaleString('ko-KR');
+    const leader = (s.teamBCount > s.teamACount) ? 'B' : 'A';
     return `
     <div class="screen intro-screen">
-      <div class="topbar">
+      <div class="topbar left-title">
         <button class="icon-btn">‹</button>
         <div class="topbar-title">${C.title}</div>
-        <button class="icon-btn">⤴</button>
+        <div class="right-icons">
+          <button class="icon-btn">⤴</button>
+          <button class="icon-btn">⌂</button>
+        </div>
       </div>
       <div class="cobrand">
         <div class="brands">
@@ -204,16 +214,24 @@ const app = {
 
       <div class="tab-pane active" data-pane="main">
         <div class="hero">
-          <div class="hero-eyebrow">🏆 ${C.prizePool} 대결</div>
+          <div style="text-align:center">
+            <span class="live-pill"><span class="dot"></span>🔥 ${live}${C.liveLabel}</span>
+          </div>
           <div class="hero-title">${C.title}</div>
           <div class="hero-sub">${C.subtitle}</div>
+          <div class="tag-row">
+            <span class="tag hot">🏆 ${C.prizePool} 대결</span>
+            <span class="tag point">참여 시 300P</span>
+          </div>
           <div class="hero-vs">
             <div class="hero-fighter left">
+              ${leader==='A'?'<span class="rank1-badge">지금 1위</span>':''}
               <div class="speech">${A.bubble}</div>
               ${this.picture(A, 'fighter-img')}
             </div>
             <div class="vs-badge">VS</div>
             <div class="hero-fighter right">
+              ${leader==='B'?'<span class="rank1-badge">지금 1위</span>':''}
               <div class="speech">${B.bubble}</div>
               ${this.picture(B, 'fighter-img')}
             </div>
@@ -239,6 +257,8 @@ const app = {
           </button>
         </div>
         <div class="pick-hint">편을 고르면 바로 연타 대결이 시작돼요 👊</div>
+
+        <div class="cashback-line">💰 ${C.cashback.replace(/(\d[\d,]*P)/, '<span class="pt">$1</span>')}</div>
 
         <div class="promo-bar">
           <span class="pay-chip">${C.promoBadge}</span>
@@ -285,10 +305,10 @@ const app = {
     const team = C.teams[mine];
     return `
     <div class="screen battle-screen">
-      <div class="topbar">
+      <div class="topbar left-title">
         <button class="icon-btn" id="backBtn">‹</button>
         <div class="topbar-title">${C.title}</div>
-        <button class="icon-btn">⤴</button>
+        <div class="right-icons"><button class="icon-btn">⤴</button></div>
       </div>
       <div class="cobrand">
         <div class="brands">
@@ -300,11 +320,13 @@ const app = {
 
       <div class="battle-fighters">
         <div class="bf a ${mine==='A'?'mine':'dimmed'}">
+          <span class="rank1" id="rank1A" style="display:none">1위</span>
           <div class="speech">${A.bubble}</div>
           ${this.picture(A, '')}
         </div>
         <div class="battle-vs">VS</div>
         <div class="bf b ${mine==='B'?'mine':'dimmed'}">
+          <span class="rank1" id="rank1B" style="display:none">1위</span>
           <div class="speech">${B.bubble}</div>
           ${this.picture(B, '')}
         </div>
@@ -340,10 +362,7 @@ const app = {
         </button>
       </div>
 
-      <div class="promo-bar">
-        <span class="pay-chip">${C.promoBadge}</span>
-        <span>${C.promoText}</span>
-      </div>
+      <div class="cashback-line battle-cashback">💰 ${C.cashback.replace(/(\d[\d,]*P)/, '<span class="pt">$1</span>')}</div>
     </div>`;
   },
 
@@ -379,7 +398,7 @@ const app = {
 
       <div class="result-actions">
         <button class="btn ghost" id="shareBtn">공유하기</button>
-        <button class="btn primary" id="nextBtn" style="background:${win.color}">다음 라운드</button>
+        <button class="btn primary" id="nextBtn">다음 라운드</button>
       </div>
     </div>`;
   },
