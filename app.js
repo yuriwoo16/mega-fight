@@ -201,6 +201,8 @@ const app = {
         <div class="hero-title">${C.title}</div>
         <div class="hero-sub">${C.subtitle}</div>
 
+        <div class="hero-question">당신의 파르페 취향은?</div>
+
         <div class="hero-vs">
           <button class="hero-fighter left" data-pick="A">
             <div class="speech">${A.bubble}</div>
@@ -217,21 +219,16 @@ const app = {
           <div class="hero-name a">${A.faction}<span class="hero-product">${A.product}</span></div>
           <div class="hero-name b">${B.faction}<span class="hero-product">${B.product}</span></div>
         </div>
-
-        <div class="hero-question">당신의 파르페 취향은?</div>
       </div>
 
       <div class="rewards-section">
-        ${C.rewards.map((r, i) => `
-          <div class="reward-item${i === 0 ? ' winner' : ''}">
-            <span class="reward-label">${r.label}</span>
-            <span class="reward-value">${r.value}</span>
+        <div class="rewards-head">참여하면 받는 혜택</div>
+        ${C.rewards.map((r) => `
+          <div class="reward-card ${r.kind}">
+            <div class="reward-tag">${r.tag}</div>
+            <div class="reward-title">${r.title}</div>
+            <div class="reward-desc">${r.desc}</div>
           </div>`).join('')}
-      </div>
-
-      <div class="promo-bar">
-        <img src="${C.logoLeft}" class="pay-logo" alt="OK캐쉬백 쇼핑">
-        <span>OK캐쉬백 쇼핑 가맹점에서 10배 연타 적용 중</span>
       </div>
 
     </div>`;
