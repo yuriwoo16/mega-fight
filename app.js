@@ -185,9 +185,6 @@ const app = {
   // ==================== INTRO ====================
   introHTML() {
     const A = C.teams.A, B = C.teams.B;
-    const s = this.engine.getGameState();
-    const live = (12000 + Math.floor(Math.random() * 4000)).toLocaleString('ko-KR');
-    const leader = s.teamBCount > s.teamACount ? 'B' : 'A';
 
     return `
     <div class="screen intro-screen">
@@ -199,33 +196,31 @@ const app = {
         <span class="period">${C.period}</span>
       </div>
 
-      <div class="hero-info">
-        <span class="live-pill"><span class="dot"></span>${live}${C.liveLabel}</span>
+      <div class="hero">
+        <div class="hero-eyebrow">${C.prizePool || '5,000,000P'} 대결</div>
         <div class="hero-title">${C.title}</div>
         <div class="hero-sub">${C.subtitle}</div>
-      </div>
 
-      <div class="pick-row">
-        <button class="pick-card a" data-pick="A">
-          ${this.picture(A, '')}
-          <span class="card-badge">${A.faction}</span>
-          <div class="card-overlay">
-            <div class="card-faction">${A.faction}</div>
-            <div class="card-product">${A.product}</div>
-          </div>
-        </button>
-        <div class="pick-vs">VS</div>
-        <button class="pick-card b" data-pick="B">
-          ${leader === 'B' ? '<span class="card-badge" style="background:var(--magenta)">지금 1위</span>' : ''}
-          ${this.picture(B, '')}
-          <div class="card-overlay">
-            <div class="card-faction">${B.faction}</div>
-            <div class="card-product">${B.product}</div>
-          </div>
-        </button>
-      </div>
+        <div class="hero-vs">
+          <button class="hero-fighter left" data-pick="A">
+            <div class="speech">${A.bubble}</div>
+            ${this.picture(A, 'fighter-img')}
+          </button>
+          <div class="vs-badge">VS</div>
+          <button class="hero-fighter right" data-pick="B">
+            <div class="speech">${B.bubble}</div>
+            ${this.picture(B, 'fighter-img')}
+          </button>
+        </div>
 
-      <div class="pick-hint">편을 골라 연타 대결에 참여하세요</div>
+        <div class="hero-names">
+          <div class="hero-name a">${A.faction}</div>
+          <div class="hero-name-vs">vs</div>
+          <div class="hero-name b">${B.faction}</div>
+        </div>
+
+        <div class="hero-question">당신의 파르페 취향은?</div>
+      </div>
 
       <div class="rewards-section">
         ${C.rewards.map((r, i) => `
@@ -354,8 +349,8 @@ const app = {
 
   // ==================== 바인딩 ====================
   bind() {
-    // 편 선택 (pick-card)
-    document.querySelectorAll('.pick-card').forEach(btn => {
+    // 편 선택 (상품 이미지 = 선택 버튼)
+    document.querySelectorAll('.hero-fighter').forEach(btn => {
       btn.onclick = () => this.goBattle(btn.dataset.pick);
     });
     // 탭(연타)
