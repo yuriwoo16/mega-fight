@@ -225,9 +225,15 @@ const app = {
         <div class="rewards-head">참여하면 받는 혜택</div>
         ${C.rewards.map((r) => `
           <div class="reward-card ${r.kind}">
-            <div class="reward-tag">${r.tag}</div>
-            <div class="reward-title">${r.title}</div>
-            <div class="reward-desc">${r.desc}</div>
+            <div class="reward-left">
+              <div class="reward-label">${r.icon} ${r.label}</div>
+              <div class="reward-sub">${r.sub}</div>
+              <div class="reward-big">${r.big}</div>
+            </div>
+            <div class="reward-ticket">
+              <div class="ticket-top">${r.ticketTop}</div>
+              <div class="ticket-mid">${r.ticketMid}</div>
+            </div>
           </div>`).join('')}
       </div>
 

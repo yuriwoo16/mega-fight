@@ -24,8 +24,8 @@ const GAME_CONFIG = {
 
   // 보상
   rewards: [
-    { tag: "우승 진영 전원", title: "4,900원 단독 공구 할인 쿠폰", desc: "응원한 파르페가 이기면 전원 발급", kind: "win" },
-    { tag: "럭키 당첨 1,000명", title: "메가커피 아이스 음료 기프티콘", desc: "참여자 중 랜덤 추첨", kind: "lucky" },
+    { kind: "win",   icon: "🏆", label: "승리 진영 혜택",   sub: "응원한 파르페가 우승하면", big: "<b>전원</b> 지급",     ticketTop: "메가커피 단독 공구", ticketMid: "4,900원 할인" },
+    { kind: "lucky", icon: "🎁", label: "추가 럭키드로우", sub: "참여만 해도 자동 응모",   big: "총 <b>1,000명</b>", ticketTop: "메가커피", ticketMid: "아이스 음료 기프티콘" },
   ],
 
   // 두 진영 — 메가 파르페 A vs B
