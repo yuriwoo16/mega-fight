@@ -5,11 +5,11 @@
    =================================================================== */
 
 const GAME_CONFIG = {
-  // 상단 헤더
+  // 상단 정보
   title: "메가파이트",
   subtitle: "5,000,000P를 건 여름 파르페 대결",
-  partnerLeft: "OK pay",
-  partnerRight: "메가MGC커피",
+  logoLeft: "img/logo_okshop.png",
+  logoRight: "img/logo_mega.png",
   period: "6.1 ~ 6.10",
 
   // 데모 라운드 길이(초). 운영 시 4시간 = 14400
@@ -19,13 +19,14 @@ const GAME_CONFIG = {
   tapValue: 1,
   comboWindow: 700,   // ms 안에 연타하면 콤보 유지
 
-  // 프로모 띠
-  promoBadge: "OK pay",
-  promoText: "OK캐쉬백 쇼핑 가맹점에서 10배 연타 적용 중",
-
   // OCB 커머스 스타일 요소
-  cashback: "우승 진영 전원 최대 800P 캐시백",
   liveLabel: "명이 응원 중",
+
+  // 보상
+  rewards: [
+    { label: "우승 진영 전원", value: "4,900원 단독 공구 할인 쿠폰 발급" },
+    { label: "럭키 당첨 1,000명", value: "메가커피 아이스 음료 기프티콘" },
+  ],
 
   // 두 진영 — 메가 파르페 A vs B
   teams: {
@@ -37,12 +38,10 @@ const GAME_CONFIG = {
       imgSrc: "img/mega_2.webp",
       imgType: "image/webp",
       imgFallback: "img/mega_2.webp",
-      emoji: "🍵",
       color: "#5FA83C",
       colorDark: "#4A8A2C",
       colorLight: "#EAF5E1",
       textColor: "#ffffff",
-      bubble: "쑥쑥\n들어와~",
       gongguPrice: "4,900원",
       normalPrice: "7,500원",
     },
@@ -54,30 +53,12 @@ const GAME_CONFIG = {
       imgSrc: "img/mega_1.avif",
       imgType: "image/avif",
       imgFallback: "img/mega_1.avif",
-      emoji: "🍧",
       color: "#F50087",
       colorDark: "#C70069",
       colorLight: "#FFE3F1",
       textColor: "#ffffff",
-      bubble: "여름엔\n팥빙수지!",
       gongguPrice: "4,900원",
       normalPrice: "7,500원",
     },
   },
-
-  // 참가 혜택
-  benefits: [
-    { icon: "🏆", title: "우승 진영 쿠폰", desc: "응원한 파르페가 이기면 단독 공구 4,900원 특가 쿠폰" },
-    { icon: "🎯", title: "연타 기여 포인트", desc: "많이 연타할수록 OK포인트 추가 지급 (최대 10,000P)" },
-    { icon: "🎁", title: "럭키 당첨", desc: "참여자 중 랜덤 1,000명 메가커피 아이스 기프티콘" },
-    { icon: "🔥", title: "집단 목표 달성", desc: "전체 500만 연타 돌파 시 할인율 추가 상승" },
-  ],
-
-  // 우승 상금
-  prizePool: "5,000,000P",
-  prizeBreakdown: [
-    { tier: "우승 진영", amount: "100P ~ 500P", desc: "기여도 기반 분배" },
-    { tier: "럭키 당첨", amount: "아이스 메가 +300P", desc: "1,000명" },
-    { tier: "참여 보상", amount: "300P", desc: "전체 참여자" },
-  ],
 };

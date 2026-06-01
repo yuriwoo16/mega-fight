@@ -1,5 +1,5 @@
 /* ===================================================================
-   app.js — 게임 로직 & UI (리디자인)
+   app.js — 게임 로직 & UI
    =================================================================== */
 
 const C = GAME_CONFIG;
@@ -67,7 +67,7 @@ const app = {
 
     // 카운트 + 막대
     const a = s.teamACount, b = s.teamBCount, sum = a + b;
-    const ra = (a / sum * 100), rb = 100 - ra;
+    const ra = sum > 0 ? (a / sum * 100) : 50, rb = 100 - ra;
     this.setText('numA', a.toLocaleString('ko-KR'));
     this.setText('numB', b.toLocaleString('ko-KR'));
     const segA = document.getElementById('segA'), segB = document.getElementById('segB');
@@ -135,8 +135,7 @@ const app = {
     const rect = area.getBoundingClientRect();
     const f = document.createElement('div');
     f.className = 'floater';
-    const boost = this.combo >= 10 ? '🔥' : '';
-    f.textContent = `+1${boost}`;
+    f.textContent = '+1';
     f.style.color = team.color;
     f.style.fontSize = (18 + Math.min(this.combo, 12)) + 'px';
     const x = ev ? (ev.clientX - rect.left) : rect.width / 2;
@@ -183,121 +182,68 @@ const app = {
     </picture>`;
   },
 
+  // ==================== INTRO ====================
   introHTML() {
     const A = C.teams.A, B = C.teams.B;
     const s = this.engine.getGameState();
-    const live = (12000 + Math.floor(Math.random()*4000)).toLocaleString('ko-KR');
-    const leader = (s.teamBCount > s.teamACount) ? 'B' : 'A';
+    const live = (12000 + Math.floor(Math.random() * 4000)).toLocaleString('ko-KR');
+    const leader = s.teamBCount > s.teamACount ? 'B' : 'A';
+
     return `
     <div class="screen intro-screen">
-      <div class="topbar left-title">
-        <button class="icon-btn">‹</button>
-        <div class="topbar-title">${C.title}</div>
-        <div class="right-icons">
-          <button class="icon-btn">⤴</button>
-          <button class="icon-btn">⌂</button>
-        </div>
-      </div>
-      <div class="cobrand">
-        <div class="brands">
-          <span class="pay-chip">${C.partnerLeft}</span>
-          <span class="x">×</span>
-          <span class="partner">${C.partnerRight}</span>
-        </div>
-        <div class="period">${C.period}</div>
-      </div>
-      <div class="tabs">
-        <button class="tab-btn active" data-tab="main">${C.title}</button>
-        <button class="tab-btn" data-tab="benefit">참가 혜택</button>
-        <button class="tab-btn" data-tab="prize">우승 상금</button>
+
+      <div class="logo-bar">
+        <img src="${C.logoLeft}" class="logo" alt="OK캐쉬백 쇼핑">
+        <span class="x-sep">×</span>
+        <img src="${C.logoRight}" class="logo" alt="메가MGC커피">
+        <span class="period">${C.period}</span>
       </div>
 
-      <div class="tab-pane active" data-pane="main">
-        <div class="hero">
-          <div style="text-align:center">
-            <span class="live-pill"><span class="dot"></span>🔥 ${live}${C.liveLabel}</span>
+      <div class="hero-info">
+        <span class="live-pill"><span class="dot"></span>${live}${C.liveLabel}</span>
+        <div class="hero-title">${C.title}</div>
+        <div class="hero-sub">${C.subtitle}</div>
+      </div>
+
+      <div class="pick-row">
+        <button class="pick-card a" data-pick="A">
+          ${this.picture(A, '')}
+          <span class="card-badge">${A.faction}</span>
+          <div class="card-overlay">
+            <div class="card-faction">${A.faction}</div>
+            <div class="card-product">${A.product}</div>
           </div>
-          <div class="hero-title">${C.title}</div>
-          <div class="hero-sub">${C.subtitle}</div>
-          <div class="tag-row">
-            <span class="tag hot">🏆 ${C.prizePool} 대결</span>
-            <span class="tag point">참여 시 300P</span>
+        </button>
+        <div class="pick-vs">VS</div>
+        <button class="pick-card b" data-pick="B">
+          ${leader === 'B' ? '<span class="card-badge" style="background:var(--magenta)">지금 1위</span>' : ''}
+          ${this.picture(B, '')}
+          <div class="card-overlay">
+            <div class="card-faction">${B.faction}</div>
+            <div class="card-product">${B.product}</div>
           </div>
-          <div class="hero-vs">
-            <div class="hero-fighter left">
-              ${leader==='A'?'<span class="rank1-badge">지금 1위</span>':''}
-              <div class="speech">${A.bubble}</div>
-              ${this.picture(A, 'fighter-img')}
-            </div>
-            <div class="vs-badge">VS</div>
-            <div class="hero-fighter right">
-              ${leader==='B'?'<span class="rank1-badge">지금 1위</span>':''}
-              <div class="speech">${B.bubble}</div>
-              ${this.picture(B, 'fighter-img')}
-            </div>
-          </div>
-          <div class="hero-names">
-            <div class="hero-name a">${A.faction}</div>
-            <div class="hero-name-vs">vs</div>
-            <div class="hero-name b">${B.faction}</div>
-          </div>
-          <div class="hero-question">당신의 파르페 취향은?</div>
-        </div>
-
-        <div class="pick-row">
-          <button class="pick-btn a" data-pick="A">
-            <span class="emoji">${A.emoji}</span>
-            ${A.faction}
-            <span class="sub">${A.product}</span>
-          </button>
-          <button class="pick-btn b" data-pick="B">
-            <span class="emoji">${B.emoji}</span>
-            ${B.faction}
-            <span class="sub">${B.product}</span>
-          </button>
-        </div>
-        <div class="pick-hint">편을 고르면 바로 연타 대결이 시작돼요 👊</div>
-
-        <div class="cashback-line">💰 ${C.cashback.replace(/(\d[\d,]*P)/, '<span class="pt">$1</span>')}</div>
-
-        <div class="promo-bar">
-          <span class="pay-chip">${C.promoBadge}</span>
-          <span>${C.promoText}</span>
-        </div>
+        </button>
       </div>
 
-      <div class="tab-pane" data-pane="benefit">
-        <div class="content-pad">
-          ${C.benefits.map(b => `
-            <div class="benefit-item">
-              <div class="benefit-icon">${b.icon}</div>
-              <div>
-                <div class="benefit-title">${b.title}</div>
-                <div class="benefit-desc">${b.desc}</div>
-              </div>
-            </div>`).join('')}
-        </div>
+      <div class="pick-hint">편을 골라 연타 대결에 참여하세요</div>
+
+      <div class="rewards-section">
+        ${C.rewards.map((r, i) => `
+          <div class="reward-item${i === 0 ? ' winner' : ''}">
+            <span class="reward-label">${r.label}</span>
+            <span class="reward-value">${r.value}</span>
+          </div>`).join('')}
       </div>
 
-      <div class="tab-pane" data-pane="prize">
-        <div class="content-pad">
-          <div class="prize-hero">
-            <div class="label">총 상금풀</div>
-            <div class="amount">${C.prizePool}</div>
-          </div>
-          ${C.prizeBreakdown.map(p => `
-            <div class="prize-row">
-              <div class="tier">${p.tier}</div>
-              <div style="text-align:right">
-                <div class="amt">${p.amount}</div>
-                <div class="desc">${p.desc}</div>
-              </div>
-            </div>`).join('')}
-        </div>
+      <div class="promo-bar">
+        <img src="${C.logoLeft}" class="pay-logo" alt="OK캐쉬백 쇼핑">
+        <span>OK캐쉬백 쇼핑 가맹점에서 10배 연타 적용 중</span>
       </div>
+
     </div>`;
   },
 
+  // ==================== BATTLE ====================
   battleHTML() {
     const s = this.engine.getGameState();
     const A = C.teams.A, B = C.teams.B;
@@ -305,30 +251,26 @@ const app = {
     const team = C.teams[mine];
     return `
     <div class="screen battle-screen">
-      <div class="topbar left-title">
-        <button class="icon-btn" id="backBtn">‹</button>
-        <div class="topbar-title">${C.title}</div>
-        <div class="right-icons"><button class="icon-btn">⤴</button></div>
-      </div>
-      <div class="cobrand">
-        <div class="brands">
-          <span class="pay-chip">${C.partnerLeft}</span><span class="x">×</span>
-          <span class="partner">${C.partnerRight}</span>
-        </div>
-        <div class="period">${C.period}</div>
+
+      <div class="logo-bar">
+        <button class="back-btn" id="backBtn">‹</button>
+        <img src="${C.logoLeft}" class="logo" alt="OK캐쉬백 쇼핑">
+        <span class="x-sep">×</span>
+        <img src="${C.logoRight}" class="logo" alt="메가MGC커피">
+        <span class="period">${C.period}</span>
       </div>
 
       <div class="battle-fighters">
-        <div class="bf a ${mine==='A'?'mine':'dimmed'}">
+        <div class="bf a ${mine === 'A' ? 'mine' : 'dimmed'}">
           <span class="rank1" id="rank1A" style="display:none">1위</span>
-          <div class="speech">${A.bubble}</div>
           ${this.picture(A, '')}
+          <div class="faction-label">${A.faction}</div>
         </div>
         <div class="battle-vs">VS</div>
-        <div class="bf b ${mine==='B'?'mine':'dimmed'}">
+        <div class="bf b ${mine === 'B' ? 'mine' : 'dimmed'}">
           <span class="rank1" id="rank1B" style="display:none">1위</span>
-          <div class="speech">${B.bubble}</div>
           ${this.picture(B, '')}
+          <div class="faction-label">${B.faction}</div>
         </div>
       </div>
 
@@ -356,32 +298,37 @@ const app = {
       </div>
 
       <div class="tap-area">
-        <button class="tap-button" id="tapBtn" style="background:linear-gradient(135deg, ${team.color}, ${team.colorDark})">
-          <span class="big">👊 ${team.faction} 응원!</span>
+        <button class="tap-button" id="tapBtn"
+          style="background:linear-gradient(135deg,${team.color},${team.colorDark})">
+          <span class="big">${team.faction} 응원!</span>
           <span class="small">탭하고 또 탭해서 점수를 올려요</span>
         </button>
       </div>
 
-      <div class="cashback-line battle-cashback">💰 ${C.cashback.replace(/(\d[\d,]*P)/, '<span class="pt">$1</span>')}</div>
+      <div class="battle-cashback">
+        우승 진영 전원 4,900원 공구 쿠폰 + 럭키 <span class="pt">1,000명</span> 기프티콘
+      </div>
+
     </div>`;
   },
 
+  // ==================== RESULT ====================
   resultHTML() {
-    const s = this.engine.getGameState();
     const r = this.engine.getResultScreen();
     const win = C.teams[r.winner];
     const userWon = r.userWon;
     return `
     <div class="screen result-screen">
-      <div class="topbar">
-        <div class="icon-btn"></div>
-        <div class="topbar-title">결과</div>
-        <div class="icon-btn"></div>
+
+      <div class="logo-bar">
+        <img src="${C.logoLeft}" class="logo" alt="OK캐쉬백 쇼핑">
+        <span class="x-sep">×</span>
+        <img src="${C.logoRight}" class="logo" alt="메가MGC커피">
       </div>
-      <div class="result-top ${userWon?'win':'lose'}" id="resultTop">
-        <div class="result-crown">${userWon?'🎉':'😢'}</div>
+
+      <div class="result-top ${userWon ? 'win' : 'lose'}" id="resultTop">
         ${this.picture(win, 'result-img')}
-        <div class="result-title">${userWon?'우리 편 우승!':'아쉽게 졌어요'}</div>
+        <div class="result-title">${userWon ? '우리 편 우승!' : '아쉽게 졌어요'}</div>
         <div class="result-sub">${win.faction} · ${win.product}</div>
       </div>
 
@@ -389,8 +336,9 @@ const app = {
         <div class="row"><span>내 연타</span><strong>${r.userTapCount.toLocaleString('ko-KR')}회</strong></div>
         <div class="row"><span>다음 공구 확정</span><strong>${win.product}</strong></div>
         <div class="row"><span>공구가</span><strong>${win.normalPrice} → ${win.gongguPrice}</strong></div>
-        <div class="row reward" style="background:${userWon?win.colorLight:'#F4F4F6'}">
-          <span>받은 포인트</span><strong style="color:${userWon?win.colorDark:'#1A1A1A'}">${r.userReward.toLocaleString('ko-KR')}P</strong>
+        <div class="row highlight">
+          <span>${userWon ? '우승 진영 혜택' : '참여 완료'}</span>
+          <strong>${userWon ? '4,900원 공구 쿠폰 발급' : '럭키 당첨 추첨 대기 중'}</strong>
         </div>
       </div>
 
@@ -400,22 +348,14 @@ const app = {
         <button class="btn ghost" id="shareBtn">공유하기</button>
         <button class="btn primary" id="nextBtn">다음 라운드</button>
       </div>
+
     </div>`;
   },
 
   // ==================== 바인딩 ====================
   bind() {
-    // 탭 전환
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.onclick = () => {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-        btn.classList.add('active');
-        document.querySelector(`[data-pane="${btn.dataset.tab}"]`).classList.add('active');
-      };
-    });
-    // 편 선택
-    document.querySelectorAll('.pick-btn').forEach(btn => {
+    // 편 선택 (pick-card)
+    document.querySelectorAll('.pick-card').forEach(btn => {
       btn.onclick = () => this.goBattle(btn.dataset.pick);
     });
     // 탭(연타)
@@ -431,8 +371,11 @@ const app = {
     const nextBtn = document.getElementById('nextBtn');
     if (nextBtn) nextBtn.onclick = () => this.reset();
     const backBtn = document.getElementById('backBtn');
-    if (backBtn) backBtn.onclick = () => { this.engine.stopRealtimeSimulation(); cancelAnimationFrame(this.rafId); this.reset(); };
-
+    if (backBtn) backBtn.onclick = () => {
+      this.engine.stopRealtimeSimulation();
+      cancelAnimationFrame(this.rafId);
+      this.reset();
+    };
     // 결과 컨페티
     if (this.screen === 'result' && this.engine.getResultScreen().userWon) {
       this.confetti();
@@ -442,7 +385,7 @@ const app = {
   confetti() {
     const top = document.getElementById('resultTop');
     if (!top) return;
-    const colors = ['#FFE14D', '#FF5B5B', '#5FA83C', '#E8506E', '#4DA6FF'];
+    const colors = ['#FFE14D', '#FF5B5B', '#5FA83C', '#F50087', '#7C5CFC'];
     for (let i = 0; i < 40; i++) {
       const c = document.createElement('div');
       c.className = 'confetti';
