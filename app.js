@@ -198,7 +198,8 @@ const app = {
 
       <div class="hero">
         <div class="hero-eyebrow">${C.prizePool || '5,000,000P'} 대결</div>
-        <div class="hero-title">${C.title}</div>
+        <img class="hero-title-img" src="img/tit.png" alt="${C.title}">
+
         <div class="hero-sub">${C.subtitle}</div>
 
         <div class="hero-question">당신의 파르페 취향은?</div>
