@@ -197,37 +197,53 @@ const app = {
       </div>
 
       <div class="hero">
-        <div class="hero-eyebrow">${C.prizePool || '5,000,000P'} 대결</div>
         <img class="hero-title-img" src="img/tit.png" alt="${C.title}">
 
-        <div class="hero-sub">${C.subtitle}</div>
-
-        <div class="hero-question">당신의 파르페 취향은?</div>
+        <div class="hero-question">당신의 메가 파르페 취향은?</div>
 
         <div class="hero-vs">
           <button class="hero-fighter left" data-pick="A">
             <div class="speech">${A.bubble}</div>
-            ${this.picture(A, 'fighter-img')}
+            <picture>
+              <source srcset="${A.imgSrc}" type="${A.imgType}">
+              <img class="fighter-img" src="${A.imgFallback}" alt="${A.product}">
+              <span class="hero-product">${A.product}</span>
+            </picture>
+            <div class="hero-name a">${A.faction}</div>
           </button>
           <div class="vs-badge">VS</div>
           <button class="hero-fighter right" data-pick="B">
             <div class="speech">${B.bubble}</div>
-            ${this.picture(B, 'fighter-img')}
+            <picture>
+              <source srcset="${B.imgSrc}" type="${B.imgType}">
+              <img class="fighter-img" src="${B.imgFallback}" alt="${B.product}">
+              <span class="hero-product">${B.product}</span>
+            </picture>
+            <div class="hero-name b">${B.faction}</div>
           </button>
         </div>
 
         <div class="hero-names">
-          <div class="hero-name a">${A.faction}<span class="hero-product">${A.product}</span></div>
-          <div class="hero-name b">${B.faction}<span class="hero-product">${B.product}</span></div>
         </div>
       </div>
 
       <div class="rewards-section">
-        <div class="rewards-head">참여하면 받는 혜택</div>
-        ${C.rewards.map((r) => `
+        <div class="rewards-head" style="font-weight: 800; font-size: 18px; line-height: 1.4;">메가 취향전<br>우승 팀에게 드려요</div>
+        ${C.rewards.filter(r => r.kind === 'win').map((r) => `
           <div class="reward-card ${r.kind}">
             <div class="reward-left">
-              <div class="reward-label">${r.icon} ${r.label}</div>
+              <div class="reward-sub">${r.sub}</div>
+              <div class="reward-big">${r.big}</div>
+            </div>
+            <div class="reward-ticket">
+              <div class="ticket-top">${r.ticketTop}</div>
+              <div class="ticket-mid">${r.ticketMid}</div>
+            </div>
+          </div>`).join('')}
+        <div class="rewards-head" style="font-weight: 800; font-size: 18px; line-height: 1.4;">참여만 해도<br>럭키드로우 응모 완료!</div>
+        ${C.rewards.filter(r => r.kind === 'lucky').map((r) => `
+          <div class="reward-card ${r.kind}">
+            <div class="reward-left">
               <div class="reward-sub">${r.sub}</div>
               <div class="reward-big">${r.big}</div>
             </div>

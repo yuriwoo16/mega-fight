@@ -24,8 +24,8 @@ const GAME_CONFIG = {
 
   // 보상
   rewards: [
-    { kind: "win",   icon: "🏆", label: "승리 진영 혜택",   sub: "응원한 파르페가 우승하면", big: "<b>전원</b> 지급",     ticketTop: "메가커피 단독 공구", ticketMid: "4,900원 할인" },
-    { kind: "lucky", icon: "🎁", label: "추가 럭키드로우", sub: "참여만 해도 자동 응모",   big: "총 <b>1,000명</b>", ticketTop: "메가커피", ticketMid: "아이스 음료 기프티콘" },
+    { kind: "win",    label: "승리 진영 혜택",   sub: "응원한 파르페가 우승하면", big: "<b>전원</b> 지급",     ticketTop: "메가커피 단독 공구", ticketMid: "4,900원 할인" },
+    { kind: "lucky",  label: "추가 럭키드로우", sub: "참여만 해도 자동 응모",   big: "총 <b>1,000명</b>", ticketTop: "메가커피", ticketMid: "아이스 음료 기프티콘" },
   ],
 
   // 두 진영 — 메가 파르페 A vs B
@@ -42,7 +42,7 @@ const GAME_CONFIG = {
       colorDark: "#0F9070",
       colorLight: "#DEFBF3",
       textColor: "#ffffff",
-      bubble: "쑥쑥\n들어와~",
+      bubble: "역시\n신상 말차!",
       gongguPrice: "4,900원",
       normalPrice: "7,500원",
     },
