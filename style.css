@@ -35,7 +35,7 @@
 
 html, body {
   font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: linear-gradient(170deg, rgba(255, 255, 255, 1) 0%, rgba(255, 240, 248, 1) 60%);
+  background: linear-gradient(170deg, rgba(245, 1, 135, 1) 0%, rgba(255, 255, 255, 1) 60%, rgba(255, 255, 255, 1) 100%);
   color: var(--ink);
   overflow-x: hidden;
   -webkit-user-select: none; user-select: none;
@@ -56,7 +56,7 @@ html, body {
 .screen { min-height: 100vh; display: flex; flex-direction: column; animation: fadeSlide 0.3s cubic-bezier(0.16,1,0.3,1); }
 /* 인트로: .hero 배경 제거 시 부모에서 그라데이션 (device-frame 흰 배경 위에 덮음) */
 .screen.intro-screen {
-  background: linear-gradient(170deg, #fff 0%, #FFF0F8 60%, var(--teamA-light) 100%);
+  background: linear-gradient(180deg, rgba(244, 193, 66, 0.3) 12%, rgba(255, 255, 255, 0.2) 39%);
 }
 @keyframes fadeSlide { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
 
@@ -95,8 +95,7 @@ html, body {
   min-height: 550px;
 }
 .hero::before {
-  content:''; position:absolute; top:-50px; right:-50px; width:170px; height:170px;
-  background: radial-gradient(circle, rgba(124,92,252,0.15), transparent 70%); border-radius:50%;
+  display: none;
 }
 .hero-eyebrow {
   display: inline-block; background: rgba(255,255,255,0.85);
@@ -113,7 +112,7 @@ html, body {
 .hero-title-img {
   display: block;
   width: 78%;
-  max-width: 300px;
+  max-width: 400px;
   height: auto;
   margin: 0 auto 6px;
   object-fit: contain;
