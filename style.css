@@ -94,6 +94,9 @@ html, body {
   color: rgba(26, 26, 46, 1);
   padding: 40px 20px 20px; text-align: center; position: relative; overflow: hidden;
   min-height: 550px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 .hero::before {
   display: none;
@@ -145,9 +148,11 @@ html, body {
 .hero-fighter.right .fighter-img { transform: rotate(5deg); background: #F9D5AC; }
 .hero-fighter:active .fighter-img { transform: scale(0.95); }
 .vs-badge {
-  font-size: 26px; font-weight: 900; font-style: italic; color: var(--ink);
+  font-size: 30px; font-weight: 900; font-style: italic; color: var(--ink);
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
   display: flex; align-items: flex-start; justify-content: center; z-index: 2;
   letter-spacing: 0;
+  margin-top: -24px;
 }
 .hero-names { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 8px 0 22px; }
 .hero-name { font-size: 16px; font-weight: 800; }
@@ -212,6 +217,21 @@ html, body {
 /* ==================== BATTLE ==================== */
 .battle-screen { background: #fff; position: relative; }
 
+.battle-title {
+  text-align: center;
+  padding: 12px 18px 4px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.03em;
+  line-height: 1.45;
+}
+.battle-title .battle-title-team {
+  font-size: 26px;
+  font-weight: 900;
+  display: block;
+}
+
 .battle-fighters {
   display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
   gap: 8px; padding: 10px 18px 6px;
@@ -221,18 +241,16 @@ html, body {
   transition: transform 0.15s; position: relative;
 }
 .bf img {
-  width: 80px; height: 80px; border-radius: 20px; object-fit: contain; padding: 6px;
+  width: 116px; height: 116px; border-radius: 26px; object-fit: contain; padding: 8px;
   border: 3px solid #fff; box-shadow: 0 2px 10px rgba(43,41,92,0.1);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 .bf.a img { background: #B1E3C2; }
 .bf.b img { background: #F9D5AC; }
-.bf.dimmed { opacity: 0.4; filter: grayscale(0.3); }
-.bf.mine img { box-shadow: 0 0 0 2px #fff, 0 6px 18px rgba(43,41,92,0.18); border-color: currentColor; }
+.bf.mine { transform: scale(1.08); }
+.bf.mine img { box-shadow: 0 0 0 3px #fff, 0 8px 22px rgba(43,41,92,0.22); border-color: currentColor; }
 .bf.a.mine { color: var(--teamA); }
 .bf.b.mine { color: var(--teamB); }
-.bf .faction-label { font-size: 11px; font-weight: 800; }
-.bf.a .faction-label { color: var(--teamA-dark); }
-.bf.b .faction-label { color: var(--teamB-dark); }
 .bf .rank1 {
   position: absolute; top: -8px;
   background: var(--magenta); color: #fff; font-size: 9px; font-weight: 800;
@@ -245,7 +263,7 @@ html, body {
 /* VS 막대 */
 .vsbar-wrap { padding: 6px 18px 4px; }
 .vsbar-labels { display: flex; justify-content: space-between; margin-bottom: 6px; }
-.vsbar-labels .lab { font-size: 12px; font-weight: 800; }
+.vsbar-labels .lab { font-size: 16px; font-weight: 800; }
 .vsbar-labels .a { color: var(--teamA-dark); }
 .vsbar-labels .b { color: var(--teamB-dark); }
 .vsbar { display: flex; height: 38px; border-radius: 12px; overflow: hidden; }
@@ -255,7 +273,7 @@ html, body {
 .vsbar .seg .num { color: #fff; font-size: 13px; font-weight: 800; font-variant-numeric: tabular-nums; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
 
 /* 타이머 */
-.timer-box { margin: 10px 18px 6px; background: var(--gray-bg); border-radius: var(--radius-sm); padding: 10px; text-align: center; }
+.timer-box { margin: 10px 18px 6px; background: var(--gray-bg); border-radius: var(--radius-sm); padding: 10px; text-align: center; visibility: hidden; }
 .timer-box .lab { font-size: 11px; color: var(--gray-2); font-weight: 700; }
 .timer-box .time { font-size: 24px; font-weight: 900; font-variant-numeric: tabular-nums; }
 .timer-box .time.urgent { color: var(--magenta); animation: pulse 0.6s infinite; }
@@ -290,6 +308,7 @@ html, body {
   font-size: 12px; font-weight: 800;
   padding: 10px 14px; border-radius: var(--radius-sm);
   text-align: center;
+  visibility: hidden;
 }
 .battle-cashback .pt { color: var(--magenta); }
 
@@ -302,13 +321,63 @@ html, body {
 
 /* ==================== RESULT ==================== */
 .result-screen { background: #fff; }
-.result-top { padding: 36px 24px 24px; text-align: center; position: relative; overflow: hidden; }
-.result-top.win { background: linear-gradient(160deg, var(--lavender), #FFF0F8); }
-.result-top.lose { background: var(--gray-bg); }
-.result-img { width: 120px; height: 120px; border-radius: 28px; object-fit: cover; border: 5px solid #fff; box-shadow: var(--shadow-card); animation: pop 0.5s cubic-bezier(0.16,1.4,0.3,1); }
+.result-top { padding: 30px 24px 26px; text-align: center; position: relative; overflow: hidden; }
+.result-top.win { background: linear-gradient(160deg, #FFF6D6, #FFE7F4 70%, #FFF0F8); }
+.result-top.lose { background: linear-gradient(160deg, var(--lavender), #EEF6FF); }
+
+/* 승리 햇살 광선 */
+.result-rays {
+  position: absolute; top: 50%; left: 50%; width: 460px; height: 460px;
+  transform: translate(-50%, -54%);
+  background: repeating-conic-gradient(from 0deg, rgba(255,205,60,0.32) 0deg 9deg, rgba(255,205,60,0) 9deg 18deg);
+  animation: spinRays 14s linear infinite;
+  z-index: 0; pointer-events: none;
+}
+@keyframes spinRays { to { transform: translate(-50%, -54%) rotate(360deg); } }
+
+.result-badge {
+  position: relative; z-index: 2;
+  display: inline-block; font-size: 15px; font-weight: 900; letter-spacing: 0.04em;
+  color: #fff; padding: 6px 18px; border-radius: 999px; margin-bottom: 14px;
+  animation: badgePop 0.5s cubic-bezier(0.16,1.6,0.3,1) both;
+}
+.result-badge.win { background: linear-gradient(90deg, #F5A623, #F50087); box-shadow: 0 6px 18px rgba(245,0,135,0.32); }
+.result-badge.lose { background: linear-gradient(90deg, var(--purple), #5FA8FF); box-shadow: 0 6px 18px rgba(124,92,252,0.3); }
+@keyframes badgePop { 0%{transform:scale(0) rotate(-12deg);opacity:0} 100%{transform:scale(1) rotate(0);opacity:1} }
+
+.result-img { position: relative; z-index: 2; width: 130px; height: 130px; border-radius: 30px; object-fit: cover; border: 5px solid #fff; box-shadow: var(--shadow-card); animation: pop 0.5s cubic-bezier(0.16,1.4,0.3,1); }
+.result-top.win .result-img { animation: popWin 0.7s cubic-bezier(0.16,1.4,0.3,1); }
 @keyframes pop { 0%{transform:scale(0.5);opacity:0} 100%{transform:scale(1);opacity:1} }
-.result-title { font-size: 24px; font-weight: 900; margin-top: 16px; }
-.result-sub { font-size: 14px; color: var(--gray-1); font-weight: 600; margin-top: 4px; }
+@keyframes popWin { 0%{transform:scale(0.4) rotate(-8deg);opacity:0} 60%{transform:scale(1.12) rotate(4deg)} 100%{transform:scale(1) rotate(0);opacity:1} }
+.result-title { position: relative; z-index: 2; font-size: 26px; font-weight: 900; margin-top: 16px; }
+.result-sub { position: relative; z-index: 2; font-size: 14px; color: var(--gray-1); font-weight: 600; margin-top: 4px; }
+
+/* 승리 보상 강조 카드 */
+.result-reward { margin: 16px 16px 0; border-radius: var(--radius-sm); padding: 20px 18px; text-align: center; position: relative; overflow: hidden; animation: rewardRise 0.5s 0.15s cubic-bezier(0.16,1,0.3,1) both; }
+@keyframes rewardRise { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+.result-reward.win { background: linear-gradient(160deg, #FFFBEF, #FFF1F8); border: 1.5px solid #FFE0B3; box-shadow: 0 8px 24px rgba(245,0,135,0.10); }
+.reward-spark { font-size: 34px; animation: bob 1.6s ease-in-out infinite; }
+@keyframes bob { 50%{transform:translateY(-6px)} }
+.reward-headline { font-size: 14px; font-weight: 800; color: var(--gray-1); margin-top: 4px; }
+.reward-headline b { color: var(--magenta); }
+.reward-amount { font-size: 30px; font-weight: 900; letter-spacing: -0.03em; color: var(--ink); margin: 4px 0 2px; }
+.reward-desc { font-size: 13px; color: var(--gray-1); font-weight: 600; }
+.reward-desc s { color: var(--gray-2); }
+.reward-desc b { color: var(--teamA-dark); font-weight: 900; }
+.reward-chip { display: inline-block; margin-top: 12px; font-size: 12px; font-weight: 800; padding: 7px 16px; border-radius: 999px; }
+.reward-chip.win { background: var(--teamA); color: #fff; }
+.reward-chip.lucky { background: #fff; color: var(--purple); border: 1.5px solid var(--purple); }
+
+/* 패배(럭키드로우) 다독임 카드 */
+.result-reward.lucky { background: linear-gradient(160deg, #F5F2FF, #EAF3FF); border: 1.5px solid #DDD3FF; }
+.lucky-headline { font-size: 15px; font-weight: 800; color: var(--ink); margin-bottom: 8px; }
+.lucky-count { display: flex; align-items: baseline; justify-content: center; gap: 4px; }
+.lucky-count .num { font-size: 44px; font-weight: 900; line-height: 1.05; font-variant-numeric: tabular-nums; background: linear-gradient(90deg, var(--purple), #5FA8FF); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.lucky-count .unit { font-size: 15px; font-weight: 800; color: var(--purple); }
+.lucky-desc { font-size: 13px; color: var(--gray-1); font-weight: 600; line-height: 1.55; margin-top: 8px; }
+.lucky-desc b { color: var(--purple); font-weight: 900; }
+.lucky-gauge { height: 8px; background: #E3DBFF; border-radius: 999px; margin: 14px 4px 4px; overflow: hidden; }
+.lucky-gauge-fill { height: 100%; width: 0; border-radius: 999px; background: linear-gradient(90deg, var(--purple), #5FA8FF); transition: width 1s cubic-bezier(0.16,1,0.3,1); }
 .result-card { margin: 16px 16px 0; border: 1px solid var(--line); border-radius: var(--radius-sm); overflow: hidden; }
 .result-card .row { display: flex; justify-content: space-between; align-items: center; padding: 15px 18px; border-bottom: 1px solid var(--line); font-size: 14px; }
 .result-card .row:last-child { border-bottom: none; }

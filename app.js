@@ -274,17 +274,19 @@ const app = {
         <span class="period">${C.period}</span>
       </div>
 
+      <div class="battle-title">
+        <span class="battle-title-team" style="color:${team.color}">${team.faction}를</span>응원하고 있어요!
+      </div>
+
       <div class="battle-fighters">
-        <div class="bf a ${mine === 'A' ? 'mine' : 'dimmed'}">
+        <div class="bf a ${mine === 'A' ? 'mine' : ''}">
           <span class="rank1" id="rank1A" style="display:none">1위</span>
           ${this.picture(A, '')}
-          <div class="faction-label">${A.faction}</div>
         </div>
         <div class="battle-vs">VS</div>
-        <div class="bf b ${mine === 'B' ? 'mine' : 'dimmed'}">
+        <div class="bf b ${mine === 'B' ? 'mine' : ''}">
           <span class="rank1" id="rank1B" style="display:none">1위</span>
           ${this.picture(B, '')}
-          <div class="faction-label">${B.faction}</div>
         </div>
       </div>
 
@@ -297,12 +299,6 @@ const app = {
           <div class="seg a" id="segA" style="width:50%"><span class="num" id="numA">0</span></div>
           <div class="seg b" id="segB" style="width:50%"><span class="num" id="numB">0</span></div>
         </div>
-      </div>
-
-      <div class="timer-box">
-        <div class="lab">라운드 종료까지</div>
-        <div class="time" id="time">1:00</div>
-        <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
       </div>
 
       <div class="mytap">
@@ -323,6 +319,12 @@ const app = {
         우승 진영 전원 4,900원 공구 쿠폰 + 럭키 <span class="pt">1,000명</span> 기프티콘
       </div>
 
+      <div class="timer-box">
+        <div class="lab">라운드 종료까지</div>
+        <div class="time" id="time">1:00</div>
+        <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
+      </div>
+
     </div>`;
   },
 
@@ -331,28 +333,50 @@ const app = {
     const r = this.engine.getResultScreen();
     const win = C.teams[r.winner];
     const userWon = r.userWon;
+    const myTeam = C.teams[this.engine.getGameState().userTeam] || win;
+    const entries = r.userTapCount;
+    const winReward = C.rewards.find(x => x.kind === 'win') || {};
     return `
     <div class="screen result-screen">
 
       <div class="logo-bar">
         <img src="${C.logoLeft}" class="logo" alt="OK캐쉬백 쇼핑">
         <span class="x-sep">×</span>
-        <img src="${C.logoRight}" class="logo" alt="메가MGC커피">
+        <img src="${C.logoRight}" class="logo logo-mega" alt="메가MGC커피">
+        <span class="period">${C.period}</span>
       </div>
 
       <div class="result-top ${userWon ? 'win' : 'lose'}" id="resultTop">
+        ${userWon ? '<div class="result-rays"></div>' : ''}
+        <div class="result-badge ${userWon ? 'win' : 'lose'}">${userWon ? 'WIN!' : 'LUCKY'}</div>
         ${this.picture(win, 'result-img')}
-        <div class="result-title">${userWon ? '우리 편 우승!' : '아쉽게 졌어요'}</div>
+        <div class="result-title">${userWon ? '우리 편 우승! 🎉' : '아쉽게 한 끗 차이!'}</div>
         <div class="result-sub">${win.faction} · ${win.product}</div>
       </div>
 
+      ${userWon ? `
+      <div class="result-reward win">
+        <div class="reward-spark">🎁</div>
+        <div class="reward-headline">승리 진영 혜택 <b>전원 지급!</b></div>
+        <div class="reward-amount">${winReward.ticketMid || win.gongguPrice}</div>
+        <div class="reward-desc">${winReward.ticketTop || '메가커피 단독 공구'} · <s>${win.normalPrice}</s> <b>${win.gongguPrice}</b></div>
+        <div class="reward-chip win">공구 쿠폰 발급 완료 ✓</div>
+      </div>` : `
+      <div class="result-reward lucky">
+        <div class="lucky-headline">${myTeam.faction} 응원, 끝까지 멋졌어요!</div>
+        <div class="lucky-count"><span class="num" id="luckyNum" data-target="${entries}">0</span><span class="unit">번 응모 완료</span></div>
+        <div class="lucky-desc">연타한 <b>${entries.toLocaleString('ko-KR')}회</b>가 그대로 럭키드로우 티켓이 됐어요.<br>많이 누를수록 당첨 확률이 쑥쑥 올라가요 🍀</div>
+        <div class="lucky-gauge"><div class="lucky-gauge-fill" id="luckyGauge"></div></div>
+        <div class="reward-chip lucky">두근두근, 당첨자 발표를 기다려 주세요!</div>
+      </div>`}
+
       <div class="result-card">
-        <div class="row"><span>내 연타</span><strong>${r.userTapCount.toLocaleString('ko-KR')}회</strong></div>
+        <div class="row"><span>내 연타</span><strong>${entries.toLocaleString('ko-KR')}회</strong></div>
         <div class="row"><span>다음 공구 확정</span><strong>${win.product}</strong></div>
         <div class="row"><span>공구가</span><strong>${win.normalPrice} → ${win.gongguPrice}</strong></div>
         <div class="row highlight">
-          <span>${userWon ? '우승 진영 혜택' : '참여 완료'}</span>
-          <strong>${userWon ? '4,900원 공구 쿠폰 발급' : '럭키 당첨 추첨 대기 중'}</strong>
+          <span>${userWon ? '우승 진영 혜택' : '내 럭키드로우 응모'}</span>
+          <strong>${userWon ? '4,900원 공구 쿠폰 발급' : `${entries.toLocaleString('ko-KR')}번 응모 · 추첨 대기 중`}</strong>
         </div>
       </div>
 
@@ -390,10 +414,27 @@ const app = {
       cancelAnimationFrame(this.rafId);
       this.reset();
     };
-    // 결과 컨페티
-    if (this.screen === 'result' && this.engine.getResultScreen().userWon) {
-      this.confetti();
+    // 결과 컨페티 / 럭키 연출
+    if (this.screen === 'result') {
+      if (this.engine.getResultScreen().userWon) this.confetti();
+      else this.luckyReveal();
     }
+  },
+
+  luckyReveal() {
+    const el = document.getElementById('luckyNum');
+    const gauge = document.getElementById('luckyGauge');
+    if (!el) return;
+    const target = parseInt(el.dataset.target, 10) || 0;
+    if (gauge) requestAnimationFrame(() => { gauge.style.width = Math.min(100, 25 + target / 4) + '%'; });
+    const dur = 900, start = performance.now();
+    const step = (now) => {
+      const p = Math.min(1, (now - start) / dur);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(target * eased).toLocaleString('ko-KR');
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
   },
 
   confetti() {
