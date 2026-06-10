@@ -11,6 +11,7 @@ const app = {
   combo: 0,
   lastTapTime: 0,
   comboTimer: null,
+  heatTimer: null,
 
   init() {
     this.engine = initGameEngine(C);
@@ -23,12 +24,14 @@ const app = {
     this.screen = 'battle';
     this.engine.startRealtimeSimulation();
     this.combo = 0;
+    clearTimeout(this.heatTimer);
     this.render();
     this.loop();
   },
   goResult() {
     this.engine.stopRealtimeSimulation();
     cancelAnimationFrame(this.rafId);
+    clearTimeout(this.heatTimer);
     this.screen = 'result';
     this.render();
   },
@@ -102,6 +105,9 @@ const app = {
     this.lastTapTime = now;
     this.showCombo(team);
 
+    // 콤보가 쌓일수록 버튼이 달궈지다 불타오름
+    this.applyHeat(team);
+
     // 떠오르는 숫자 + 파티클
     this.spawnFloater(ev, team);
     this.spawnParticles(ev, team);
@@ -122,6 +128,39 @@ const app = {
       clearTimeout(this.comboTimer);
       this.comboTimer = setTimeout(() => c.classList.remove('show'), 800);
     }
+  },
+
+  // ==================== 콤보 버튼 가열(Heat) 연출 ====================
+  heatLevel() {
+    if (this.combo >= 20) return 3;  // 점화
+    if (this.combo >= 10) return 2;  // 가열
+    if (this.combo >= 5) return 1;   // 예열
+    return 0;
+  },
+
+  applyHeat(team) {
+    const btn = document.getElementById('tapBtn');
+    if (!btn) return;
+    const lv = this.heatLevel();
+    // 불꽃 색을 응원 팀 색상으로
+    btn.style.setProperty('--heat', team.color);
+    btn.style.setProperty('--heat-dark', team.colorDark);
+    btn.classList.toggle('heat-1', lv >= 1);
+    btn.classList.toggle('heat-2', lv >= 2);
+    btn.classList.toggle('heat-3', lv >= 3);
+
+    // 점화 단계에서 약한 진동
+    if (lv >= 3 && navigator.vibrate) navigator.vibrate(10);
+
+    // 콤보가 끊기면(연타 멈추면) 버튼이 식음
+    clearTimeout(this.heatTimer);
+    this.heatTimer = setTimeout(() => this.coolDown(), C.comboWindow + 250);
+  },
+
+  coolDown() {
+    this.combo = 0;
+    const btn = document.getElementById('tapBtn');
+    if (btn) btn.classList.remove('heat-1', 'heat-2', 'heat-3');
   },
 
   spawnFloater(ev, team) {
@@ -201,15 +240,18 @@ const app = {
     const banner = document.createElement('div');
     banner.className = 'fx-banner ' + tier;
     banner.textContent = big ? `🔥 ${count} COMBO!` : `${count} 연타!`;
-    banner.style.color = color;
     layer.appendChild(banner);
     setTimeout(() => banner.remove(), 1000);
 
     // 중앙 파티클 분출
     this.fxBurst(layer, colors, big ? 30 : 10, big ? 230 : 90);
 
-    // 진영 재료 이미지(말차=녹차잎 / 팥빙=팥)가 펑 터지듯 분출
-    if (team.fxImg) this.fxImgBurst(layer, team.fxImg, big ? 20 : 9, big ? 240 : 120, big ? 46 : 32);
+    // 진영 재료 이미지(말차=녹차잎 / 팥빙=팥)
+    // 중간: 중앙에서 톡 솟았다 살랑이며 낙하 / 큰: 사방으로 펑 폭발
+    if (team.fxImg) {
+      if (big) this.fxImgBurst(layer, team.fxImg, 38, 50, 1300);
+      else this.fxImgFall(layer, team.fxImg, 12, 26, 1900);
+    }
 
     // 중간 연출: 가벼운 흔들림 + 진동 후 종료
     if (!big) {
@@ -278,10 +320,11 @@ const app = {
     }
   },
 
-  // 진영 재료 이미지가 중앙에서 펑 터지듯 사방으로 분출
-  fxImgBurst(layer, src, n, spread, size) {
+  // 진영 재료 이미지가 중앙에서 펑 터져 사방으로 퍼지며 화면 밖으로 날아감
+  fxImgBurst(layer, src, n, size, dur) {
     const rect = layer.getBoundingClientRect();
     const cx = rect.width / 2, cy = rect.height * 0.42;
+    const reach = Math.hypot(rect.width, rect.height); // 화면 대각선 = 어느 방향이든 밖으로 나감
     for (let i = 0; i < n; i++) {
       const img = document.createElement('img');
       img.className = 'fx-pop';
@@ -292,12 +335,48 @@ const app = {
       img.style.left = cx + 'px';
       img.style.top = cy + 'px';
       const ang = (Math.PI * 2 * i) / n + Math.random() * 0.5;
-      const dist = spread * (0.5 + Math.random() * 0.7);
+      const dist = reach * (0.62 + Math.random() * 0.45);
       img.style.setProperty('--dx', Math.cos(ang) * dist + 'px');
-      img.style.setProperty('--dy', (Math.sin(ang) * dist + 50) + 'px'); // 약간의 중력
+      img.style.setProperty('--dy', Math.sin(ang) * dist + 'px');
       img.style.setProperty('--rot', (Math.random() * 720 - 360) + 'deg');
+      img.style.animationDuration = dur + 'ms';
       layer.appendChild(img);
-      setTimeout(() => img.remove(), 950);
+      setTimeout(() => img.remove(), dur + 60);
+    }
+  },
+
+  // 중간 연출: 중앙에서 잎/팥이 톡 솟았다가 살랑이며 화면 아래로 떨어짐
+  fxImgFall(layer, src, n, size, dur) {
+    const rect = layer.getBoundingClientRect();
+    const cx = rect.width / 2, cy = rect.height * 0.42;
+    for (let i = 0; i < n; i++) {
+      const img = document.createElement('img');
+      img.className = 'fx-leaf';
+      img.src = src;
+      img.alt = '';
+      const sz = size * (0.7 + Math.random() * 0.7);
+      img.style.width = img.style.height = sz + 'px';
+      img.style.left = cx + 'px';
+      img.style.top = cy + 'px';
+      // 위쪽 부채꼴로 톡 솟아오름
+      const ang = -Math.PI * (0.18 + Math.random() * 0.64);
+      const pop = 55 + Math.random() * 80;
+      const x1 = Math.cos(ang) * pop;
+      const y1 = Math.sin(ang) * pop; // 음수 = 위로
+      // 좌우 살랑 드리프트 + 중력으로 화면 아래까지 낙하
+      const x2 = x1 + (Math.random() - 0.5) * 90;
+      const y2 = rect.height * 0.78 + Math.random() * rect.height * 0.35;
+      const r1 = Math.random() * 120 - 60;
+      const r2 = r1 + (Math.random() * 600 - 300);
+      img.style.setProperty('--x1', x1 + 'px');
+      img.style.setProperty('--y1', y1 + 'px');
+      img.style.setProperty('--x2', x2 + 'px');
+      img.style.setProperty('--y2', y2 + 'px');
+      img.style.setProperty('--r1', r1 + 'deg');
+      img.style.setProperty('--r2', r2 + 'deg');
+      img.style.animationDuration = (dur + Math.random() * 500) + 'ms';
+      layer.appendChild(img);
+      setTimeout(() => img.remove(), dur + 700);
     }
   },
 
