@@ -58,7 +58,7 @@ const GAME_CONFIG = {
       colorDark: "#E05520",
       colorLight: "#FFECD6",
       textColor: "#ffffff",
-      bubble: "여름엔\n팥빙수지!",
+      bubble: "근본은\n팥빙수지!",
       gongguPrice: "4,900원",
       normalPrice: "7,500원",
     },

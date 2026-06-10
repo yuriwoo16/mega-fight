@@ -197,11 +197,11 @@ html, body {
   100% { transform: rotate(5deg) translateY(0); }
 }
 .vs-badge {
-  font-size: 30px; font-weight: 900; font-style: italic; color: var(--ink);
+  font-size: 22px; font-weight: 900; font-style: italic; color: rgba(199, 199, 199, 1);
   font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
   display: flex; align-items: flex-start; justify-content: center; z-index: 2;
   letter-spacing: 0;
-  margin-top: -34px;
+  margin-top: -70px;
 }
 .hero-names { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 8px 0 22px; }
 .hero-name { font-size: 16px; font-weight: 800; }
@@ -265,10 +265,11 @@ html, body {
 
 /* ==================== BATTLE ==================== */
 .battle-screen { background: #fff; position: relative; }
+.battle-screen .logo-bar { margin-bottom: 16px; }
 
 .battle-title {
   text-align: center;
-  padding: 12px 18px 4px;
+  padding: 36px 18px 4px;
   font-size: 20px;
   font-weight: 700;
   color: var(--ink);
@@ -316,7 +317,7 @@ html, body {
 .vsbar-labels .lab { font-size: 16px; font-weight: 800; }
 .vsbar-labels .a { color: var(--teamA-dark); }
 .vsbar-labels .b { color: var(--teamB-dark); }
-.vsbar { display: flex; height: 38px; border-radius: 12px; overflow: hidden; }
+.vsbar { display: flex; height: 30px; border-radius: 12px; overflow: hidden; }
 .vsbar .seg { height: 100%; display: flex; align-items: center; transition: width 0.4s cubic-bezier(0.16,1,0.3,1); }
 .vsbar .seg.a { background: linear-gradient(90deg, var(--teamA-dark), var(--teamA)); justify-content: flex-start; padding-left: 12px; }
 .vsbar .seg.b { background: linear-gradient(90deg, var(--teamB), var(--teamB-dark)); justify-content: flex-end; padding-right: 12px; }
@@ -332,7 +333,7 @@ html, body {
 .timer-fill { height: 100%; background: var(--magenta); transition: width 0.3s linear; }
 
 /* 내 연타 */
-.mytap { text-align: center; padding: 8px 0 2px; }
+.mytap { text-align: center; padding: 50px 0 30px; }
 .mytap .lab { font-size: 12px; color: var(--gray-2); font-weight: 700; }
 .mytap .count { font-size: 38px; font-weight: 900; font-variant-numeric: tabular-nums; line-height: 1.1; }
 .mytap .count .unit { font-size: 17px; font-weight: 700; color: var(--gray-1); }
@@ -368,6 +369,69 @@ html, body {
 @keyframes burst { 0%{opacity:1;transform:translate(0,0) scale(1)} 100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(0.3)} }
 .shake { animation: shake 0.3s; }
 @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 50%{transform:translateX(5px)} 75%{transform:translateX(-3px)} }
+
+/* ==================== 마일스톤 연출 (연타 구간 폭발 효과) ==================== */
+.fx-layer { position: absolute; inset: 0; pointer-events: none; z-index: 50; overflow: hidden; }
+
+/* 충격파 링 */
+.fx-ring {
+  position: absolute; left: 50%; top: 42%;
+  width: 70px; height: 70px; margin: -35px 0 0 -35px;
+  border-radius: 50%; border: 5px solid currentColor;
+  transform: scale(0); opacity: 0.9;
+  animation: fxRing 0.7s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+.fx-ring.big { border-width: 9px; box-shadow: 0 0 24px currentColor; animation-duration: 0.85s; }
+@keyframes fxRing { to { transform: scale(7); opacity: 0; } }
+
+/* 펀치 배너 텍스트 */
+.fx-banner {
+  position: absolute; left: 50%; top: 42%;
+  transform: translate(-50%,-50%) scale(0.2);
+  font-weight: 900; letter-spacing: -0.04em; white-space: nowrap;
+  text-align: center; opacity: 0;
+  -webkit-text-stroke: 2px #fff;
+  paint-order: stroke fill;
+  text-shadow: 0 6px 0 rgba(0,0,0,0.10), 0 10px 26px rgba(0,0,0,0.28);
+  animation: fxBanner 0.95s cubic-bezier(0.16,1.5,0.3,1) forwards;
+}
+.fx-banner.medium { font-size: 36px; }
+.fx-banner.big { font-size: 64px; -webkit-text-stroke-width: 3px; }
+@keyframes fxBanner {
+  0%   { opacity: 0; transform: translate(-50%,-50%) scale(0.2) rotate(-10deg); }
+  25%  { opacity: 1; transform: translate(-50%,-50%) scale(1.18) rotate(3deg); }
+  45%  { transform: translate(-50%,-50%) scale(1) rotate(0); }
+  78%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%,-62%) scale(1.06); }
+}
+
+/* 화면 컬러 플래시 */
+.fx-flash { position: absolute; inset: 0; opacity: 0; animation: fxFlash 0.5s ease-out forwards; }
+@keyframes fxFlash { 0% { opacity: 0.5; } 100% { opacity: 0; } }
+
+/* 가장자리 글로우 */
+.fx-edge { position: absolute; inset: 0; opacity: 0; box-shadow: inset 0 0 70px 14px currentColor; animation: fxEdge 0.7s ease-out forwards; }
+@keyframes fxEdge { 0% { opacity: 0.85; } 100% { opacity: 0; } }
+
+/* 메가 방사광선 */
+.fx-rays {
+  position: absolute; left: 50%; top: 42%; width: 640px; height: 640px;
+  margin: -320px 0 0 -320px;
+  background: repeating-conic-gradient(from 0deg, rgba(255,225,77,0.5) 0deg 8deg, rgba(255,225,77,0) 8deg 16deg);
+  opacity: 0; animation: fxRays 0.95s ease-out forwards;
+}
+@keyframes fxRays { 0% { opacity: 0; transform: scale(0.3) rotate(0); } 30% { opacity: 0.9; } 100% { opacity: 0; transform: scale(1.25) rotate(60deg); } }
+
+/* 강한 흔들림 (큰/메가 연출) */
+.shake-hard { animation: shakeHard 0.5s; }
+@keyframes shakeHard {
+  0%,100% { transform: translate(0,0) }
+  15% { transform: translate(-9px,5px) rotate(-0.6deg) }
+  30% { transform: translate(9px,-5px) rotate(0.6deg) }
+  45% { transform: translate(-7px,4px) }
+  60% { transform: translate(7px,-3px) }
+  80% { transform: translate(-4px,2px) }
+}
 
 /* ==================== RESULT ==================== */
 .result-screen { background: #fff; }

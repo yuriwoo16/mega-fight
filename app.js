@@ -106,14 +106,8 @@ const app = {
     this.spawnFloater(ev, team);
     this.spawnParticles(ev, team);
 
-    // 마일스톤 (10콤보마다 화면 흔들림)
-    if (this.combo > 0 && this.combo % 10 === 0) {
-      const scr = document.querySelector('.battle-screen');
-      scr.classList.remove('shake'); void scr.offsetWidth; scr.classList.add('shake');
-      if (navigator.vibrate) navigator.vibrate([30, 20, 40]);
-    } else if (navigator.vibrate) {
-      navigator.vibrate(20);
-    }
+    // 마일스톤 연출 (누적 연타 수 기준 — 10단위 중간 / 50단위 큰 / 100단위 메가)
+    this.milestone(s.userTapCount, team);
 
     this.updateBattle();
   },
@@ -163,6 +157,120 @@ const app = {
       p.style.setProperty('--dy', Math.sin(ang) * dist + 'px');
       area.appendChild(p);
       setTimeout(() => p.remove(), 600);
+    }
+  },
+
+  // ==================== 마일스톤 연출 ====================
+  // 큰 연출: 50번마다(50·100·150…) — 가장 화려함
+  // 중간 연출: 10번마다(10·20·30…) — 적당히 화려함
+  milestone(count, team) {
+    if (count <= 0) return;
+    if (count % 50 === 0) this.fxTier('big', count, team);
+    else if (count % 10 === 0) this.fxTier('medium', count, team);
+    else if (navigator.vibrate) navigator.vibrate(16);
+  },
+
+  fxLayer() {
+    const scr = document.querySelector('.battle-screen');
+    if (!scr) return null;
+    let layer = scr.querySelector('.fx-layer');
+    if (!layer) { layer = document.createElement('div'); layer.className = 'fx-layer'; scr.appendChild(layer); }
+    return layer;
+  },
+
+  fxTier(tier, count, team) {
+    const scr = document.querySelector('.battle-screen');
+    const layer = this.fxLayer();
+    if (!scr || !layer) return;
+    const big = tier === 'big';
+    const color = team.color;
+    const colors = [team.color, team.colorDark, '#FFE14D', '#fff'];
+
+    // 충격파 링 (큰 연출은 3겹 연쇄)
+    const rings = big ? 3 : 1;
+    for (let i = 0; i < rings; i++) {
+      const ring = document.createElement('div');
+      ring.className = 'fx-ring' + (big ? ' big' : '');
+      ring.style.color = color;
+      ring.style.animationDelay = (i * 0.11) + 's';
+      layer.appendChild(ring);
+      setTimeout(() => ring.remove(), 1000 + i * 150);
+    }
+
+    // 펀치 배너
+    const banner = document.createElement('div');
+    banner.className = 'fx-banner ' + tier;
+    banner.textContent = big ? `🔥 ${count} COMBO!` : `${count} 연타!`;
+    banner.style.color = color;
+    layer.appendChild(banner);
+    setTimeout(() => banner.remove(), 1000);
+
+    // 중앙 파티클 분출
+    this.fxBurst(layer, colors, big ? 30 : 10, big ? 230 : 90);
+
+    // 중간 연출: 가벼운 흔들림 + 진동 후 종료
+    if (!big) {
+      scr.classList.remove('shake'); void scr.offsetWidth; scr.classList.add('shake');
+      if (navigator.vibrate) navigator.vibrate([30, 20, 40]);
+      return;
+    }
+
+    // 큰 연출: 컬러 플래시 + 가장자리 글로우 + 방사광선 + 풀스크린 폭죽 + 캐릭터 펀치 + 강한 흔들림
+    const flash = document.createElement('div');
+    flash.className = 'fx-flash';
+    flash.style.background = `radial-gradient(circle at 50% 42%, #fff, ${color} 70%)`;
+    layer.appendChild(flash);
+    setTimeout(() => flash.remove(), 520);
+
+    const edge = document.createElement('div');
+    edge.className = 'fx-edge';
+    edge.style.color = color;
+    layer.appendChild(edge);
+    setTimeout(() => edge.remove(), 760);
+
+    const rays = document.createElement('div');
+    rays.className = 'fx-rays';
+    layer.appendChild(rays);
+    setTimeout(() => rays.remove(), 1000);
+
+    this.fxConfetti(layer, colors);
+
+    const myFighter = document.querySelector('.bf.mine');
+    if (myFighter) { myFighter.classList.remove('bump'); void myFighter.offsetWidth; myFighter.classList.add('bump'); }
+
+    scr.classList.remove('shake-hard'); void scr.offsetWidth; scr.classList.add('shake-hard');
+    if (navigator.vibrate) navigator.vibrate([70, 35, 70, 35, 140]);
+  },
+
+  fxBurst(layer, colors, n, spread) {
+    const rect = layer.getBoundingClientRect();
+    const cx = rect.width / 2, cy = rect.height * 0.42;
+    for (let i = 0; i < n; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.style.width = p.style.height = (8 + Math.random() * 8) + 'px';
+      p.style.background = colors[i % colors.length];
+      p.style.left = cx + 'px';
+      p.style.top = cy + 'px';
+      const ang = (Math.PI * 2 * i) / n + Math.random() * 0.4;
+      const dist = spread * (0.5 + Math.random() * 0.7);
+      p.style.setProperty('--dx', Math.cos(ang) * dist + 'px');
+      p.style.setProperty('--dy', Math.sin(ang) * dist + 'px');
+      layer.appendChild(p);
+      setTimeout(() => p.remove(), 650);
+    }
+  },
+
+  fxConfetti(layer, colors) {
+    for (let i = 0; i < 28; i++) {
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      c.style.background = colors[i % colors.length];
+      c.style.left = Math.random() * 100 + '%';
+      c.style.animationDuration = (1.2 + Math.random() * 1.2) + 's';
+      c.style.animationDelay = (Math.random() * 0.3) + 's';
+      layer.appendChild(c);
+      setTimeout(() => c.remove(), 2600);
     }
   },
 
