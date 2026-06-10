@@ -142,17 +142,66 @@ html, body {
   width: 100%; aspect-ratio: 1;
   border-radius: 28px; padding: 14px; object-fit: contain;
   box-shadow: var(--shadow-card);
-  transition: transform 0.12s ease;
 }
-.hero-fighter.left .fighter-img { transform: rotate(-5deg); background: #B1E3C2; }
-.hero-fighter.right .fighter-img { transform: rotate(5deg); background: #F9D5AC; }
-.hero-fighter:active .fighter-img { transform: scale(0.95); }
+.hero-fighter.left .fighter-img {
+  background: #B1E3C2;
+  transform: rotate(-5deg);
+  animation: bounceLeft 2.5s linear infinite;
+}
+.hero-fighter.right .fighter-img {
+  background: #F9D5AC;
+  transform: rotate(5deg);
+  animation: bounceRight 2.5s linear infinite;
+  animation-delay: 1.4s;
+  animation-fill-mode: backwards;
+}
+.hero-fighter:active .fighter-img {
+  animation: none;
+  transform: scale(0.95);
+}
+.hero-fighter.left .speech {
+  animation: speechFloatLeft 2.5s linear infinite;
+  animation-delay: 0.05s;
+}
+.hero-fighter.right .speech {
+  animation: speechFloatRight 2.5s linear infinite;
+  animation-delay: 1.45s;
+}
+@keyframes speechFloatLeft {
+  0%   { transform: translateY(0); }
+  20%  { transform: translateY(-8px); }
+  38%  { transform: translateY(1px); }
+  50%  { transform: translateY(0); }
+  100% { transform: translateY(0); }
+}
+@keyframes speechFloatRight {
+  0%   { transform: translateY(0); }
+  20%  { transform: translateY(-8px); }
+  38%  { transform: translateY(1px); }
+  50%  { transform: translateY(0); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes bounceLeft {
+  0%   { transform: rotate(-5deg) translateY(0);      animation-timing-function: cubic-bezier(0.33,0,0.66,0); }
+  20%  { transform: rotate(-3.5deg) translateY(-10px); animation-timing-function: cubic-bezier(0.33,1,0.66,1); }
+  38%  { transform: rotate(-5.1deg) translateY(0.15px); animation-timing-function: ease-out; }
+  50%  { transform: rotate(-5deg) translateY(0); }
+  100% { transform: rotate(-5deg) translateY(0); }
+}
+@keyframes bounceRight {
+  0%   { transform: rotate(5deg) translateY(0);       animation-timing-function: cubic-bezier(0.33,0,0.66,0); }
+  20%  { transform: rotate(3.5deg) translateY(-10px);  animation-timing-function: cubic-bezier(0.33,1,0.66,1); }
+  38%  { transform: rotate(5.1deg) translateY(0.15px); animation-timing-function: ease-out; }
+  50%  { transform: rotate(5deg) translateY(0); }
+  100% { transform: rotate(5deg) translateY(0); }
+}
 .vs-badge {
   font-size: 30px; font-weight: 900; font-style: italic; color: var(--ink);
   font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
   display: flex; align-items: flex-start; justify-content: center; z-index: 2;
   letter-spacing: 0;
-  margin-top: -24px;
+  margin-top: -34px;
 }
 .hero-names { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 8px 0 22px; }
 .hero-name { font-size: 16px; font-weight: 800; }
@@ -256,6 +305,7 @@ html, body {
   background: var(--magenta); color: #fff; font-size: 9px; font-weight: 800;
   padding: 3px 7px; border-radius: 999px; z-index: 3;
 }
+#rank1A { visibility: hidden; }
 .battle-vs { font-size: 16px; font-weight: 900; color: var(--gray-3); }
 .bf.bump { animation: bump 0.25s ease; }
 @keyframes bump { 0%{transform:translateY(0)} 40%{transform:translateY(-10px) scale(1.05)} 100%{transform:translateY(0)} }

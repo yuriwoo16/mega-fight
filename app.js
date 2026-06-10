@@ -207,8 +207,8 @@ const app = {
             <picture>
               <source srcset="${A.imgSrc}" type="${A.imgType}">
               <img class="fighter-img" src="${A.imgFallback}" alt="${A.product}">
-              <span class="hero-product">${A.product}</span>
             </picture>
+            <span class="hero-product">${A.product}</span>
             <div class="hero-name a">${A.faction}</div>
           </button>
           <div class="vs-badge">VS</div>
@@ -217,8 +217,8 @@ const app = {
             <picture>
               <source srcset="${B.imgSrc}" type="${B.imgType}">
               <img class="fighter-img" src="${B.imgFallback}" alt="${B.product}">
-              <span class="hero-product">${B.product}</span>
             </picture>
+            <span class="hero-product">${B.product}</span>
             <div class="hero-name b">${B.faction}</div>
           </button>
         </div>
