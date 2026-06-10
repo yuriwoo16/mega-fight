@@ -208,6 +208,9 @@ const app = {
     // 중앙 파티클 분출
     this.fxBurst(layer, colors, big ? 30 : 10, big ? 230 : 90);
 
+    // 진영 재료 이미지(말차=녹차잎 / 팥빙=팥)가 펑 터지듯 분출
+    if (team.fxImg) this.fxImgBurst(layer, team.fxImg, big ? 20 : 9, big ? 240 : 120, big ? 46 : 32);
+
     // 중간 연출: 가벼운 흔들림 + 진동 후 종료
     if (!big) {
       scr.classList.remove('shake'); void scr.offsetWidth; scr.classList.add('shake');
@@ -234,6 +237,7 @@ const app = {
     setTimeout(() => rays.remove(), 1000);
 
     this.fxConfetti(layer, colors);
+    if (team.fxImg) this.fxImgConfetti(layer, team.fxImg);
 
     const myFighter = document.querySelector('.bf.mine');
     if (myFighter) { myFighter.classList.remove('bump'); void myFighter.offsetWidth; myFighter.classList.add('bump'); }
@@ -271,6 +275,46 @@ const app = {
       c.style.animationDelay = (Math.random() * 0.3) + 's';
       layer.appendChild(c);
       setTimeout(() => c.remove(), 2600);
+    }
+  },
+
+  // 진영 재료 이미지가 중앙에서 펑 터지듯 사방으로 분출
+  fxImgBurst(layer, src, n, spread, size) {
+    const rect = layer.getBoundingClientRect();
+    const cx = rect.width / 2, cy = rect.height * 0.42;
+    for (let i = 0; i < n; i++) {
+      const img = document.createElement('img');
+      img.className = 'fx-pop';
+      img.src = src;
+      img.alt = '';
+      const sz = size * (0.7 + Math.random() * 0.6);
+      img.style.width = img.style.height = sz + 'px';
+      img.style.left = cx + 'px';
+      img.style.top = cy + 'px';
+      const ang = (Math.PI * 2 * i) / n + Math.random() * 0.5;
+      const dist = spread * (0.5 + Math.random() * 0.7);
+      img.style.setProperty('--dx', Math.cos(ang) * dist + 'px');
+      img.style.setProperty('--dy', (Math.sin(ang) * dist + 50) + 'px'); // 약간의 중력
+      img.style.setProperty('--rot', (Math.random() * 720 - 360) + 'deg');
+      layer.appendChild(img);
+      setTimeout(() => img.remove(), 950);
+    }
+  },
+
+  // 진영 재료 이미지가 컨페티처럼 위에서 우수수 떨어짐 (큰 연출)
+  fxImgConfetti(layer, src) {
+    for (let i = 0; i < 18; i++) {
+      const img = document.createElement('img');
+      img.className = 'fx-confetti-img';
+      img.src = src;
+      img.alt = '';
+      const sz = 18 + Math.random() * 20;
+      img.style.width = img.style.height = sz + 'px';
+      img.style.left = Math.random() * 100 + '%';
+      img.style.animationDuration = (1.4 + Math.random() * 1.3) + 's';
+      img.style.animationDelay = (Math.random() * 0.35) + 's';
+      layer.appendChild(img);
+      setTimeout(() => img.remove(), 3000);
     }
   },
 
