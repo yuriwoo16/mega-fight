@@ -146,13 +146,13 @@ html, body {
 .hero-fighter.left .fighter-img {
   background: #B1E3C2;
   transform: rotate(-5deg);
-  animation: bounceLeft 2.5s linear infinite;
+  animation: bounceLeft 3s linear infinite;
 }
 .hero-fighter.right .fighter-img {
   background: #F9D5AC;
   transform: rotate(5deg);
-  animation: bounceRight 2.5s linear infinite;
-  animation-delay: 1.4s;
+  animation: bounceRight 3s linear infinite;
+  animation-delay: 1s;
   animation-fill-mode: backwards;
 }
 .hero-fighter:active .fighter-img {
@@ -160,40 +160,40 @@ html, body {
   transform: scale(0.95);
 }
 .hero-fighter.left .speech {
-  animation: speechFloatLeft 2.5s linear infinite;
+  animation: speechFloatLeft 3s linear infinite;
   animation-delay: 0.05s;
 }
 .hero-fighter.right .speech {
-  animation: speechFloatRight 2.5s linear infinite;
-  animation-delay: 1.45s;
+  animation: speechFloatRight 3s linear infinite;
+  animation-delay: 1.05s;
 }
 @keyframes speechFloatLeft {
   0%   { transform: translateY(0);       animation-timing-function: cubic-bezier(0.33,0,0.66,0); }
-  20%  { transform: translateY(-10px);   animation-timing-function: cubic-bezier(0.33,1,0.66,1); }
-  38%  { transform: translateY(0.15px);  animation-timing-function: ease-out; }
-  50%  { transform: translateY(0); }
+  16%  { transform: translateY(-10px);   animation-timing-function: cubic-bezier(0.33,1,0.66,1); }
+  30%  { transform: translateY(0.15px);  animation-timing-function: ease-out; }
+  33%  { transform: translateY(0); }
   100% { transform: translateY(0); }
 }
 @keyframes speechFloatRight {
   0%   { transform: translateY(0);       animation-timing-function: cubic-bezier(0.33,0,0.66,0); }
-  20%  { transform: translateY(-10px);   animation-timing-function: cubic-bezier(0.33,1,0.66,1); }
-  38%  { transform: translateY(0.15px);  animation-timing-function: ease-out; }
-  50%  { transform: translateY(0); }
+  16%  { transform: translateY(-10px);   animation-timing-function: cubic-bezier(0.33,1,0.66,1); }
+  30%  { transform: translateY(0.15px);  animation-timing-function: ease-out; }
+  33%  { transform: translateY(0); }
   100% { transform: translateY(0); }
 }
 
 @keyframes bounceLeft {
-  0%   { transform: rotate(-5deg) translateY(0);      animation-timing-function: cubic-bezier(0.33,0,0.66,0); }
-  20%  { transform: rotate(-3.5deg) translateY(-10px); animation-timing-function: cubic-bezier(0.33,1,0.66,1); }
-  38%  { transform: rotate(-5.1deg) translateY(0.15px); animation-timing-function: ease-out; }
-  50%  { transform: rotate(-5deg) translateY(0); }
+  0%   { transform: rotate(-5deg) translateY(0);       animation-timing-function: cubic-bezier(0.33,0,0.66,0); }
+  16%  { transform: rotate(-3.5deg) translateY(-10px); animation-timing-function: cubic-bezier(0.33,1,0.66,1); }
+  30%  { transform: rotate(-5.1deg) translateY(0.15px); animation-timing-function: ease-out; }
+  33%  { transform: rotate(-5deg) translateY(0); }
   100% { transform: rotate(-5deg) translateY(0); }
 }
 @keyframes bounceRight {
-  0%   { transform: rotate(5deg) translateY(0);       animation-timing-function: cubic-bezier(0.33,0,0.66,0); }
-  20%  { transform: rotate(3.5deg) translateY(-10px);  animation-timing-function: cubic-bezier(0.33,1,0.66,1); }
-  38%  { transform: rotate(5.1deg) translateY(0.15px); animation-timing-function: ease-out; }
-  50%  { transform: rotate(5deg) translateY(0); }
+  0%   { transform: rotate(5deg) translateY(0);        animation-timing-function: cubic-bezier(0.33,0,0.66,0); }
+  16%  { transform: rotate(3.5deg) translateY(-10px);  animation-timing-function: cubic-bezier(0.33,1,0.66,1); }
+  30%  { transform: rotate(5.1deg) translateY(0.15px); animation-timing-function: ease-out; }
+  33%  { transform: rotate(5deg) translateY(0); }
   100% { transform: rotate(5deg) translateY(0); }
 }
 .vs-badge {
