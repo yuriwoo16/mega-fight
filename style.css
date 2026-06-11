@@ -2,6 +2,14 @@
    style.css — 메가파이트 (OK캐쉬백 공식 디자인 시스템)
    =================================================================== */
 
+/* 연타 배너 전용 폰트 — 강원교육튼튼체 ExtraBold (상업용 무료) */
+@font-face {
+  font-family: 'GangwonEduPower';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/GangwonEduPowerExtraBoldA.woff') format('woff');
+  font-weight: 800;
+  font-display: swap;
+}
+
 :root {
   --navy: #2B295C;
   --navy-dark: #211F49;
@@ -93,7 +101,7 @@ html, body {
   background: transparent;
   color: rgba(26, 26, 46, 1);
   padding: 40px 20px 20px; text-align: center; position: relative; overflow: hidden;
-  min-height: 550px;
+  /* min-height 제거 → hero-vs 아래 간격이 반응형으로 늘어나지 않고 콘텐츠 크기로 고정 */
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -120,6 +128,7 @@ html, body {
   height: auto;
   margin: 0 auto 6px;
   object-fit: contain;
+  color: rgba(245, 194, 68, 1);
 }
 .hero-sub { font-size: 14px; color: var(--gray-1); font-weight: 600; margin-bottom: 20px; }
 
@@ -203,7 +212,7 @@ html, body {
   letter-spacing: 0;
   margin-top: -70px;
 }
-.hero-names { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 8px 0 22px; }
+.hero-names { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 8px 0 16px; }
 .hero-name { font-size: 16px; font-weight: 800; }
 .hero-name.a { color: var(--teamA-dark); }
 .hero-name.b { color: var(--teamB-dark); }
@@ -215,6 +224,21 @@ html, body {
   margin: 4px 16px 24px;
   display: flex; flex-direction: column; gap: 12px;
 }
+
+/* 혜택 뱃지 — 각 rewards-head 위에 표시 */
+.benefit-badge {
+  display: inline-block;
+  align-self: center;
+  background: #F5C244;
+  color: #1A1A2E;
+  font-size: 14px;
+  font-weight: 800;
+  padding: 4px 14px;
+  border-radius: 999px;
+  margin-bottom: -6px; /* rewards-head와의 간격 조정 */
+  letter-spacing: 0.02em;
+}
+
 .rewards-head {
   font-size: 16px; font-weight: 800; color: var(--ink);
   text-align: center; margin: 8px 2px 2px; line-height: 1.3;
@@ -224,6 +248,7 @@ html, body {
   box-sizing: content-box;
   padding: 18px; display: flex; align-items: center; gap: 14px;
   box-shadow: 0 3px 20px 3px rgba(0, 0, 0, 0.03);
+  margin-bottom: 20px;
 }
 .reward-card.win {
   height: 72px;
@@ -429,36 +454,101 @@ html, body {
 .fx-ring.big { border-width: 9px; box-shadow: 0 0 24px currentColor; animation-duration: 0.85s; }
 @keyframes fxRing { to { transform: scale(7); opacity: 0; } }
 
-/* 펀치 배너 텍스트 — 🔥 이모지는 자연색, .txt 부분만 135° 팀 색상 그라데이션 */
-/* --bd: 진한 팀색(숫자 쪽), --bm: 기본 팀색, --bl: 밝은 팀색(텍스트 쪽) */
+/* 펀치 배너 — 강원교육튼튼체 · 배경 이미지 (big=bg1 노란폭발 / medium=bg2 잉크스플랫) */
 .fx-banner {
   position: absolute; left: 50%; top: 42%;
   transform: translate(-50%,-50%) scale(0.2);
   display: inline-block;
-  font-family: 'Pretendard', -apple-system, sans-serif; font-weight: 900;
-  letter-spacing: -0.02em; white-space: nowrap;
+  font-family: 'GangwonEduPower', 'Pretendard', sans-serif; font-weight: 800;
+  letter-spacing: 0; white-space: nowrap; line-height: 0.95;
   text-align: center; opacity: 0;
-  filter: drop-shadow(0 2px 0 color-mix(in srgb, var(--bd) 55%, transparent))
-          drop-shadow(0 6px 14px rgba(0,0,0,0.22));
   animation: fxBanner 1s cubic-bezier(0.34,1.45,0.64,1) forwards;
 }
-/* 숫자+텍스트 부분만 그라데이션 — 이모지 텍스트 노드는 건드리지 않음 */
-.fx-banner .txt {
-  display: inline-block;
-  background: linear-gradient(135deg, var(--bd) 0%, var(--bm) 45%, var(--bl) 100%);
+/* 배경 이미지 레이어 — 기본값, 각 tier에서 위치·크기 오버라이드 */
+.fx-banner::before {
+  content: ''; position: absolute; left: 50%;
+  transform: translate(-50%, -50%);
+  background: center / contain no-repeat;
+  z-index: -1; pointer-events: none;
+}
+/* bg1 노란폭발: 텍스트 영역에 맞게 축소, 중앙 정렬 */
+.fx-banner.big::before {
+  width: 290px; height: 290px;
+  top: 44%;
+  background-image: url('img/bg1.png');
+}
+/* bg2 잉크스플랫: 90%로 더 축소(240→216) + 전체 0.75배(→162), 중심 6px 우측, 뒤 화면 비치도록 오파시티 */
+.fx-banner.medium::before {
+  width: 162px; height: 162px;
+  top: 36%; left: calc(50% + 6px);
+  background-image: url('img/bg2.png');
+  opacity: 0.9;
+}
+
+/* 두 줄 구성: 숫자 윗줄 / 단어 아랫줄 */
+.fx-banner .num, .fx-banner .word {
+  display: block;
+  transform: skewX(-5deg);
+  /* outside 스트로크: paint-order stroke fill = fill이 stroke 안쪽을 덮어 바깥쪽만 노출 */
+  -webkit-text-stroke: 8px #16120F; paint-order: stroke fill;
+}
+
+/* ── 큰 연출 (bg1 · 이미지1) ── 숫자가 COMBO!보다 크게 */
+.fx-banner.big { font-size: 48px; }  /* COMBO! 기준 */
+/* 스트로크 분리 기법: 본체 span = 굵은 스트로크 레이어(뒤),
+   ::after = 동일 텍스트를 그라데이션/흰색으로 위에 겹침 → 완전한 outside 스트로크.
+   (gradient text는 fill이 투명이라 paint-order만으로는 본체가 깎여 얇아짐) */
+.fx-banner.big .num { font-size: 1.5em; } /* 숫자가 COMBO!보다 1.5× 크게 */
+
+.fx-banner.big .num,
+.fx-banner.big .word {
+  position: relative;
+  -webkit-text-stroke: 14px #16120F;
+  -webkit-text-fill-color: #16120F;
+  paint-order: stroke fill;
+  filter: drop-shadow(5px 6px 0 rgba(12,7,0,0.82)) drop-shadow(2px 3px 3px rgba(12,7,0,0.3));
+}
+.fx-banner.big .num::after,
+.fx-banner.big .word::after {
+  content: attr(data-text);
+  position: absolute; left: 0; top: 0; width: 100%;
+  -webkit-text-stroke: 0;
+}
+/* 숫자: 노랑→주황→빨강 그라데이션 (본체 두께 온전히 유지) */
+.fx-banner.big .num::after {
+  background: linear-gradient(180deg, #FFD23A 10%, #FF9C1A 52%, #F23E0E 94%);
   -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-.fx-banner.medium { font-size: 44px; }
-.fx-banner.big { font-size: 64px; }
-/* 뒷 화면이 비치도록 최대 오파시티 0.85 */
+/* COMBO!: 흰색 */
+.fx-banner.big .word::after { -webkit-text-fill-color: #fff; }
+
+/* ── 작은 연출 (bg2 · 이미지2) ── */
+.fx-banner.medium {
+  font-size: 39px;
+  animation-name: fxBannerMedium; /* 피크 오파시티 0.82로 제한 → 뒤 화면 비침 */
+}
+.fx-banner.medium .num,
+.fx-banner.medium .word { -webkit-text-stroke-width: 5px; }
+.fx-banner.medium .num  { font-size: 1.45em; color: #F2C233; }
+.fx-banner.medium .word { color: #C8D636; }
 @keyframes fxBanner {
   0%   { opacity: 0; transform: translate(-50%,-50%) scale(0.2) rotate(-14deg); }
-  22%  { opacity: 0.85; transform: translate(-50%,-50%) scale(1.22) rotate(1deg); }
+  22%  { opacity: 1; transform: translate(-50%,-50%) scale(1.22) rotate(1deg); }
   40%  { transform: translate(-50%,-50%) scale(0.96) rotate(-4deg); }
   52%  { transform: translate(-50%,-50%) scale(1.03) rotate(-3deg); }
   62%  { transform: translate(-50%,-50%) scale(1) rotate(-3deg); }
-  80%  { opacity: 0.85; }
+  80%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%,-66%) scale(1.08) rotate(-3deg); }
+}
+/* 작은 연출 전용: 피크 opacity 0.82 → 뒤 화면 비침 */
+@keyframes fxBannerMedium {
+  0%   { opacity: 0; transform: translate(-50%,-50%) scale(0.2) rotate(-14deg); }
+  22%  { opacity: 0.9; transform: translate(-50%,-50%) scale(1.22) rotate(1deg); }
+  40%  { transform: translate(-50%,-50%) scale(0.96) rotate(-4deg); }
+  52%  { transform: translate(-50%,-50%) scale(1.03) rotate(-3deg); }
+  62%  { transform: translate(-50%,-50%) scale(1) rotate(-3deg); }
+  80%  { opacity: 0.9; }
   100% { opacity: 0; transform: translate(-50%,-66%) scale(1.08) rotate(-3deg); }
 }
 
@@ -470,14 +560,22 @@ html, body {
 .fx-edge { position: absolute; inset: 0; opacity: 0; box-shadow: inset 0 0 70px 14px currentColor; animation: fxEdge 0.7s ease-out forwards; }
 @keyframes fxEdge { 0% { opacity: 0.85; } 100% { opacity: 0; } }
 
-/* 메가 방사광선 */
+/* 집중선 — 바깥에서 중앙으로 모이는 연출 (회전 없음, 화면 풀커버로 원형 짤림 없음) */
 .fx-rays {
-  position: absolute; left: 50%; top: 42%; width: 640px; height: 640px;
-  margin: -320px 0 0 -320px;
-  background: repeating-conic-gradient(from 0deg, rgba(255,225,77,0.5) 0deg 8deg, rgba(255,225,77,0) 8deg 16deg);
-  opacity: 0; animation: fxRays 0.95s ease-out forwards;
+  position: absolute; inset: -45%;
+  background: repeating-conic-gradient(from 4deg at 50% 47%,
+    rgba(255,206,96,0.42) 0deg 5deg, rgba(255,206,96,0) 5deg 19deg);
+  /* 중앙은 비우고 가장자리는 부드럽게 페이드 */
+  -webkit-mask: radial-gradient(circle at 50% 47%, transparent 10%, #000 30%, #000 62%, transparent 92%);
+  mask: radial-gradient(circle at 50% 47%, transparent 10%, #000 30%, #000 62%, transparent 92%);
+  opacity: 0; animation: fxRays 0.9s ease-out forwards;
+  pointer-events: none;
 }
-@keyframes fxRays { 0% { opacity: 0; transform: scale(0.3) rotate(0); } 30% { opacity: 0.9; } 100% { opacity: 0; transform: scale(1.25) rotate(60deg); } }
+@keyframes fxRays {
+  0%   { opacity: 0; transform: scale(1.7); }
+  25%  { opacity: 1; }
+  100% { opacity: 0; transform: scale(0.92); }
+}
 
 /* 진영 재료 이미지 폭발 (중앙에서 펑) */
 .fx-pop {

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>그라데이션 방향 시안</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#1a1a2e; font-family:'Pretendard',-apple-system,sans-serif; padding:24px 16px 60px; }
+  h1 { font-size:17px; font-weight:800; text-align:center; color:#fff; margin-bottom:4px; }
+  .desc { text-align:center; color:rgba(255,255,255,0.5); font-size:11px; margin-bottom:24px; }
+  .sect { font-size:11px; font-weight:800; color:rgba(255,255,255,0.35); text-transform:uppercase; letter-spacing:.1em; max-width:900px; margin:0 auto 10px; padding-left:2px; }
+
+  .grid4 { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; max-width:700px; margin:0 auto 30px; }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; max-width:700px; margin:0 auto 30px; }
+
+  .card {
+    background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1);
+    border-radius:14px; padding:28px 12px 16px; text-align:center;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:14px; position:relative;
+  }
+  .tag { position:absolute; top:8px; left:0; right:0; text-align:center; font-size:9.5px; font-weight:700; color:rgba(255,255,255,0.3); }
+  .rec { font-size:10px; font-weight:800; color:#FFD700; position:absolute; top:6px; right:8px; }
+
+  /* =====================================================
+     핵심: 전체 텍스트 하나의 요소로 그라데이션 적용
+     - 숫자가 앞(진한 색) / 텍스트가 뒤(밝은 색)로 자연스럽게 구분됨
+     - display:inline-block → background-clip:text 동작 보장
+  ===================================================== */
+  .b {
+    white-space:nowrap; font-family:'Pretendard',-apple-system,sans-serif;
+    font-weight:900; letter-spacing:-0.02em;
+    display:inline-block;
+    -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent;
+    transform:rotate(-3deg);
+    opacity:0.9;
+  }
+  .b.m  { font-size:30px; }
+  .b.lg { font-size:44px; }
+
+  /* =====================================================
+     그라데이션 색상 정의 (방향별 × 팀별)
+     말차: 진한(숫자) #0A6B52 → 밝은(텍스트) #72FFD8
+     팥빙: 진한(숫자) #A03010 → 밝은(텍스트) #FFB89A
+  ===================================================== */
+
+  /* A팀 — 방향별 */
+  .A-180 { background:linear-gradient(180deg, #0A6B52 0%,  #1AAC88 45%, #72FFD8 100%); }
+  .A-90  { background:linear-gradient(90deg,  #0A6B52 0%,  #1AAC88 45%, #72FFD8 100%); }
+  .A-135 { background:linear-gradient(135deg, #0A6B52 0%,  #1AAC88 50%, #72FFD8 100%); }
+  .A-45  { background:linear-gradient(45deg,  #0A6B52 0%,  #1AAC88 50%, #72FFD8 100%); }
+
+  /* A팀 그림자 */
+  .sd-A { filter:drop-shadow(0 2px 0 #064F3D) drop-shadow(0 6px 14px rgba(0,0,0,0.4)); }
+
+  /* B팀 — 방향별 */
+  .B-180 { background:linear-gradient(180deg, #A03010 0%,  #E85520 45%, #FFB89A 100%); }
+  .B-90  { background:linear-gradient(90deg,  #A03010 0%,  #E85520 45%, #FFB89A 100%); }
+  .B-135 { background:linear-gradient(135deg, #A03010 0%,  #E85520 50%, #FFB89A 100%); }
+  .B-45  { background:linear-gradient(45deg,  #A03010 0%,  #E85520 50%, #FFB89A 100%); }
+
+  /* B팀 그림자 */
+  .sd-B { filter:drop-shadow(0 2px 0 #6E1E08) drop-shadow(0 6px 14px rgba(0,0,0,0.4)); }
+
+  /* ---- 게임 씬 ---- */
+  .scene {
+    background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);
+    border-radius:14px; overflow:hidden; position:relative;
+  }
+  .gbg { padding:14px; display:flex; flex-direction:column; gap:8px; height:150px; }
+  .mock-bar { height:18px; border-radius:8px; overflow:hidden; display:flex; }
+  .ma { background:linear-gradient(90deg,#0F9070,#1EBD97); flex:52; }
+  .mb { background:linear-gradient(90deg,#FF6E3D,#E05520); flex:48; }
+  .btns { flex:1; display:flex; gap:8px; }
+  .btn { flex:1; border-radius:10px; font-size:10px; font-weight:900; color:#fff; font-family:inherit; display:flex; align-items:center; justify-content:center; }
+  .ov {
+    position:absolute; left:50%; top:50%;
+    transform:translate(-50%,-50%) rotate(-3deg);
+    white-space:nowrap; font-family:'Pretendard',-apple-system,sans-serif;
+    font-weight:900; letter-spacing:-0.02em;
+    display:inline-block;
+    -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent; opacity:0.9; z-index:10;
+  }
+  .ov.m  { font-size:26px; }
+  .ov.lg { font-size:36px; }
+  .sc-lbl { padding:6px 0 8px; text-align:center; font-size:10px; color:rgba(255,255,255,0.3); font-weight:700; border-top:1px solid rgba(255,255,255,0.08); }
+  .sc-tag { position:absolute; top:8px; right:10px; font-size:10px; font-weight:700; color:rgba(255,255,255,0.25); z-index:11; }
+</style>
+</head>
+<body>
+<h1>그라데이션 방향 시안</h1>
+<div class="desc">숫자 앞 = 진한 팀색 / 텍스트 뒤 = 밝은 팀색 — 단일 그라데이션으로 자연스럽게 구분</div>
+
+<!-- ======= A팀 방향 4종 ======= -->
+<div class="sect">A. 말차파 (Green Team) — 4가지 그라데이션 방향</div>
+<div class="grid4">
+
+  <div class="card">
+    <span class="tag">① 180° 수직 (위→아래)</span>
+    <span class="b m A-180 sd-A">🔥 30 연타!</span>
+    <span class="b lg A-180 sd-A">🔥 50 COMBO!</span>
+  </div>
+
+  <div class="card">
+    <span class="tag">② 90° 수평 (좌→우)</span>
+    <span class="b m A-90 sd-A">🔥 30 연타!</span>
+    <span class="b lg A-90 sd-A">🔥 50 COMBO!</span>
+  </div>
+
+  <div class="card">
+    <span class="tag">③ 135° 대각 ↗ (에디토리얼)</span>
+    <span class="rec">★ 추천</span>
+    <span class="b m A-135 sd-A">🔥 30 연타!</span>
+    <span class="b lg A-135 sd-A">🔥 50 COMBO!</span>
+  </div>
+
+  <div class="card">
+    <span class="tag">④ 45° 대각 ↘ (역방향)</span>
+    <span class="b m A-45 sd-A">🔥 30 연타!</span>
+    <span class="b lg A-45 sd-A">🔥 50 COMBO!</span>
+  </div>
+
+</div>
+
+<!-- ======= B팀 방향 4종 ======= -->
+<div class="sect">B. 팥빙파 (Red Team) — 4가지 그라데이션 방향</div>
+<div class="grid4">
+
+  <div class="card">
+    <span class="tag">① 180° 수직</span>
+    <span class="b m B-180 sd-B">🔥 30 연타!</span>
+    <span class="b lg B-180 sd-B">🔥 50 COMBO!</span>
+  </div>
+
+  <div class="card">
+    <span class="tag">② 90° 수평</span>
+    <span class="b m B-90 sd-B">🔥 30 연타!</span>
+    <span class="b lg B-90 sd-B">🔥 50 COMBO!</span>
+  </div>
+
+  <div class="card">
+    <span class="tag">③ 135° 대각 ↗</span>
+    <span class="rec">★ 추천</span>
+    <span class="b m B-135 sd-B">🔥 30 연타!</span>
+    <span class="b lg B-135 sd-B">🔥 50 COMBO!</span>
+  </div>
+
+  <div class="card">
+    <span class="tag">④ 45° 대각 ↘</span>
+    <span class="b m B-45 sd-B">🔥 30 연타!</span>
+    <span class="b lg B-45 sd-B">🔥 50 COMBO!</span>
+  </div>
+
+</div>
+
+<!-- ======= 게임 씬 위 시인성 ======= -->
+<div class="sect">C. 실제 게임 배경 위 시인성 — ③ 135° 대각 (추천)</div>
+<div class="grid2">
+
+  <div class="scene">
+    <div class="gbg">
+      <div class="mock-bar"><div class="ma"></div><div class="mb"></div></div>
+      <div class="btns">
+        <div class="btn" style="background:linear-gradient(135deg,#18AC87,#0F9070)">말차파</div>
+        <div class="btn" style="background:linear-gradient(135deg,#FF6E3D,#E05520)">팥빙파</div>
+      </div>
+    </div>
+    <span class="ov m A-135 sd-A">🔥 30 연타!</span>
+    <div class="sc-tag">말차 · 중간</div>
+    <div class="sc-lbl">말차파 30연타 / medium</div>
+  </div>
+
+  <div class="scene">
+    <div class="gbg">
+      <div class="mock-bar"><div class="ma"></div><div class="mb"></div></div>
+      <div class="btns">
+        <div class="btn" style="background:linear-gradient(135deg,#18AC87,#0F9070)">말차파</div>
+        <div class="btn" style="background:linear-gradient(135deg,#FF6E3D,#E05520)">팥빙파</div>
+      </div>
+    </div>
+    <span class="ov lg A-135 sd-A">🔥 50 COMBO!</span>
+    <div class="sc-tag">말차 · 큰연출</div>
+    <div class="sc-lbl">말차파 50 COMBO / big</div>
+  </div>
+
+  <div class="scene">
+    <div class="gbg">
+      <div class="mock-bar"><div class="ma"></div><div class="mb"></div></div>
+      <div class="btns">
+        <div class="btn" style="background:linear-gradient(135deg,#18AC87,#0F9070)">말차파</div>
+        <div class="btn" style="background:linear-gradient(135deg,#FF6E3D,#E05520)">팥빙파</div>
+      </div>
+    </div>
+    <span class="ov m B-135 sd-B">🔥 30 연타!</span>
+    <div class="sc-tag">팥빙 · 중간</div>
+    <div class="sc-lbl">팥빙파 30연타 / medium</div>
+  </div>
+
+  <div class="scene">
+    <div class="gbg">
+      <div class="mock-bar"><div class="ma"></div><div class="mb"></div></div>
+      <div class="btns">
+        <div class="btn" style="background:linear-gradient(135deg,#18AC87,#0F9070)">말차파</div>
+        <div class="btn" style="background:linear-gradient(135deg,#FF6E3D,#E05520)">팥빙파</div>
+      </div>
+    </div>
+    <span class="ov lg B-135 sd-B">🔥 50 COMBO!</span>
+    <div class="sc-tag">팥빙 · 큰연출</div>
+    <div class="sc-lbl">팥빙파 50 COMBO / big</div>
+  </div>
+
+</div>
+
+<!-- ======= 대안: 90° 수평 ======= -->
+<div class="sect">D. 비교용 — ② 90° 수평 적용시</div>
+<div class="grid2">
+  <div class="scene">
+    <div class="gbg">
+      <div class="mock-bar"><div class="ma"></div><div class="mb"></div></div>
+      <div class="btns">
+        <div class="btn" style="background:linear-gradient(135deg,#18AC87,#0F9070)">말차파</div>
+        <div class="btn" style="background:linear-gradient(135deg,#FF6E3D,#E05520)">팥빙파</div>
+      </div>
+    </div>
+    <span class="ov lg A-90 sd-A">🔥 50 COMBO!</span>
+    <div class="sc-lbl">말차파 50 COMBO / 90° 수평</div>
+  </div>
+  <div class="scene">
+    <div class="gbg">
+      <div class="mock-bar"><div class="ma"></div><div class="mb"></div></div>
+      <div class="btns">
+        <div class="btn" style="background:linear-gradient(135deg,#18AC87,#0F9070)">말차파</div>
+        <div class="btn" style="background:linear-gradient(135deg,#FF6E3D,#E05520)">팥빙파</div>
+      </div>
+    </div>
+    <span class="ov lg B-90 sd-B">🔥 50 COMBO!</span>
+    <div class="sc-lbl">팥빙파 50 COMBO / 90° 수평</div>
+  </div>
+</div>
+
+</body>
+</html>

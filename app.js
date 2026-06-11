@@ -236,16 +236,12 @@ const app = {
       setTimeout(() => ring.remove(), 1000 + i * 150);
     }
 
-    // 펀치 배너 — 135° 팀 색상 그라데이션 (숫자 앞=진한, 텍스트 뒤=밝은)
+    // 펀치 배너 — 강원교육튼튼체 2줄 (숫자 / 단어) + 배경 이미지
     const banner = document.createElement('div');
     banner.className = 'fx-banner ' + tier;
-    banner.style.setProperty('--bd', team.gradDark);
-    banner.style.setProperty('--bm', team.color);
-    banner.style.setProperty('--bl', team.gradLight);
-    // 🔥 이모지는 텍스트 노드로 자연색 유지, 숫자+텍스트만 .txt span에 그라데이션
     banner.innerHTML = big
-      ? `🔥 <span class="txt">${count} COMBO!</span>`
-      : `<span class="txt">${count} 연타!</span>`;
+      ? `<span class="num" data-text="${count}">${count}</span><span class="word" data-text="COMBO!">COMBO!</span>`
+      : `<span class="num">${count}</span><span class="word">연타!</span>`;
     layer.appendChild(banner);
     setTimeout(() => banner.remove(), 1000);
 
@@ -255,7 +251,7 @@ const app = {
     // 진영 재료 이미지(말차=녹차잎 / 팥빙=팥)
     // 중간: 중앙에서 톡 솟았다 살랑이며 낙하 / 큰: 사방으로 펑 폭발
     if (team.fxImg) {
-      if (big) this.fxImgBurst(layer, team.fxImg, 38, 50, 1300);
+      if (big) this.fxImgBurst(layer, team.fxImg, 55, 50, 1500);
       else this.fxImgFall(layer, team.fxImg, 12, 26, 1900);
     }
 
@@ -388,7 +384,7 @@ const app = {
 
   // 진영 재료 이미지가 컨페티처럼 위에서 우수수 떨어짐 (큰 연출)
   fxImgConfetti(layer, src) {
-    for (let i = 0; i < 18; i++) {
+    for (let i = 0; i < 30; i++) {
       const img = document.createElement('img');
       img.className = 'fx-confetti-img';
       img.src = src;
@@ -465,6 +461,7 @@ const app = {
       </div>
 
       <div class="rewards-section">
+        <span class="benefit-badge">혜택 1</span>
         <div class="rewards-head" style="font-weight: 800; font-size: 18px; line-height: 1.4;">메가 취향전<br>우승 팀에게 드려요</div>
         ${C.rewards.filter(r => r.kind === 'win').map((r) => `
           <div class="reward-card ${r.kind}">
@@ -477,6 +474,7 @@ const app = {
               <div class="ticket-mid">${r.ticketMid}</div>
             </div>
           </div>`).join('')}
+        <span class="benefit-badge">혜택 2</span>
         <div class="rewards-head" style="font-weight: 800; font-size: 18px; line-height: 1.4;">참여만 해도<br>럭키드로우 응모 완료!</div>
         ${C.rewards.filter(r => r.kind === 'lucky').map((r) => `
           <div class="reward-card ${r.kind}">

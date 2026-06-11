@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>연타 배너 스타일 시안 (티머니 둥근바람)</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  @font-face {
+    font-family: 'TmoneyRoundWind';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/TmoneyRoundWindExtraBold.woff') format('woff');
+    font-weight: 800; font-display: swap;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#1a1a2e; font-family:'Pretendard',sans-serif; padding:24px 16px 60px; }
+  h1 { font-size:17px; font-weight:800; text-align:center; color:#fff; margin-bottom:4px; }
+  .desc { text-align:center; color:rgba(255,255,255,0.5); font-size:11px; margin-bottom:24px; }
+  .sect { font-size:11px; font-weight:800; color:rgba(255,255,255,0.4); text-transform:uppercase; letter-spacing:.1em; max-width:760px; margin:0 auto 10px; padding-left:2px; }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; max-width:760px; margin:0 auto 30px; }
+
+  .card {
+    background:#fff; border-radius:14px; min-height:200px;
+    display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;
+  }
+  .card.dark { background:#23233e; }
+  .tag { position:absolute; top:8px; left:0; right:0; text-align:center; font-size:10px; font-weight:700; color:rgba(0,0,0,0.35); z-index:20; }
+  .card.dark .tag { color:rgba(255,255,255,0.4); }
+  .rec { position:absolute; top:6px; right:8px; font-size:10px; font-weight:800; color:#FF7A1A; z-index:20; }
+
+  /* ===== 공통 배너 베이스 ===== */
+  .b {
+    position:relative; z-index:10;
+    font-family:'TmoneyRoundWind', sans-serif; font-weight:800;
+    white-space:nowrap; line-height:1.05; text-align:center;
+    transform:rotate(-4deg);
+  }
+  .b .row2 { display:block; }      /* 두 줄 배치용 */
+  .b.lg { font-size:60px; }
+  .b.md { font-size:46px; }
+
+  /* 🔥 이모지는 자연색 */
+  .fire { -webkit-text-stroke:0; text-shadow:none; color:initial; }
+
+  /* ===== 폭발 배경 (starburst) ===== */
+  .burst {
+    position:absolute; left:50%; top:50%; width:340px; height:340px;
+    transform:translate(-50%,-50%); z-index:1; pointer-events:none;
+  }
+  .burst.gold  { background:repeating-conic-gradient(#FFD42A 0deg 7deg, transparent 7deg 15deg); }
+  .burst.green { background:repeating-conic-gradient(#3FE0AE 0deg 7deg, transparent 7deg 15deg); }
+  .burst.red   { background:repeating-conic-gradient(#FF9B6B 0deg 7deg, transparent 7deg 15deg); }
+  /* 부드러운 가장자리 페이드 */
+  .burst { -webkit-mask:radial-gradient(circle, #000 38%, transparent 70%); mask:radial-gradient(circle, #000 38%, transparent 70%); }
+
+  /* ===== A안: 골드 고정 (이미지 그대로) ===== */
+  .gold-fill {
+    color:#FFD42A;
+    -webkit-text-stroke:6px #1A1A1A; paint-order:stroke fill;
+    text-shadow:3px 3px 0 #1A1A1A,4px 4px 0 #1A1A1A,5px 5px 0 #1A1A1A,6px 6px 0 #1A1A1A,7px 8px 10px rgba(0,0,0,0.35);
+  }
+  /* 골드 그라데이션 버전 */
+  .gold-grad .gtxt {
+    display:inline-block;
+    background:linear-gradient(180deg,#FFE98A 0%,#FFD42A 50%,#F5A623 100%);
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  }
+
+  /* ===== B안: 팀색 채움 + 검정 외곽선 ===== */
+  .green-fill {
+    color:#1FD89B;
+    -webkit-text-stroke:6px #0A3D2E; paint-order:stroke fill;
+    text-shadow:3px 3px 0 #0A3D2E,4px 4px 0 #0A3D2E,5px 5px 0 #0A3D2E,6px 6px 0 #0A3D2E,7px 8px 10px rgba(0,0,0,0.3);
+  }
+  .red-fill {
+    color:#FF7A4D;
+    -webkit-text-stroke:6px #4A1206; paint-order:stroke fill;
+    text-shadow:3px 3px 0 #4A1206,4px 4px 0 #4A1206,5px 5px 0 #4A1206,6px 6px 0 #4A1206,7px 8px 10px rgba(0,0,0,0.3);
+  }
+
+  /* ===== C안: 흰 외곽선(밝은 배경 대비) ===== */
+  .gold-white {
+    color:#FFC92A;
+    -webkit-text-stroke:5px #fff; paint-order:stroke fill;
+    filter:drop-shadow(3px 4px 0 #1A1A1A) drop-shadow(0 6px 10px rgba(0,0,0,0.3));
+  }
+</style>
+</head>
+<body>
+<h1>"연타" 배너 스타일 시안 — 티머니 둥근바람</h1>
+<div class="desc">🔥 이모지 자연색 · 폭발배경 + 둥근 폰트 + 검정 외곽선 + 3D 그림자</div>
+
+<!-- A안: 골드 고정 (이미지 그대로) -->
+<div class="sect">A. 골드 고정 (제공 이미지 그대로 · 팀 구분 없음)</div>
+<div class="grid2">
+  <div class="card">
+    <span class="tag">A · 30 연타 (폭발배경 O)</span>
+    <span class="rec">★</span>
+    <div class="burst gold"></div>
+    <div class="b lg gold-fill">30<span class="row2">연타!</span></div>
+  </div>
+  <div class="card">
+    <span class="tag">A · 50 COMBO (폭발배경 O)</span>
+    <div class="burst gold"></div>
+    <div class="b md gold-fill"><span class="fire">🔥</span><br>50 COMBO!</div>
+  </div>
+</div>
+
+<!-- A2: 골드 그라데이션 -->
+<div class="sect">A-2. 골드 그라데이션 채움 (단색 대신 밝은노랑→골드)</div>
+<div class="grid2">
+  <div class="card">
+    <span class="tag">A-2 · 30 연타</span>
+    <div class="burst gold"></div>
+    <div class="b lg gold-fill gold-grad" style="-webkit-text-stroke:6px #1A1A1A;paint-order:stroke fill;"><span class="gtxt">30</span><span class="row2"><span class="gtxt">연타!</span></span></div>
+  </div>
+  <div class="card">
+    <span class="tag">A-2 · 50 COMBO</span>
+    <div class="burst gold"></div>
+    <div class="b md gold-fill gold-grad" style="-webkit-text-stroke:6px #1A1A1A;paint-order:stroke fill;"><span class="fire">🔥</span><br><span class="gtxt">50 COMBO!</span></div>
+  </div>
+</div>
+
+<!-- B안: 팀색 채움 -->
+<div class="sect">B. 팀색 채움 + 검정 외곽선 (말차=초록 / 팥빙=빨강)</div>
+<div class="grid2">
+  <div class="card">
+    <span class="tag">B · 말차파 30 연타</span>
+    <span class="rec">★</span>
+    <div class="burst green"></div>
+    <div class="b lg green-fill">30<span class="row2">연타!</span></div>
+  </div>
+  <div class="card">
+    <span class="tag">B · 팥빙파 30 연타</span>
+    <div class="burst red"></div>
+    <div class="b lg red-fill">30<span class="row2">연타!</span></div>
+  </div>
+  <div class="card">
+    <span class="tag">B · 말차파 50 COMBO</span>
+    <div class="burst green"></div>
+    <div class="b md green-fill"><span class="fire">🔥</span><br>50 COMBO!</div>
+  </div>
+  <div class="card">
+    <span class="tag">B · 팥빙파 50 COMBO</span>
+    <div class="burst red"></div>
+    <div class="b md red-fill"><span class="fire">🔥</span><br>50 COMBO!</div>
+  </div>
+</div>
+
+<!-- 배경 없는 버전 (현재 게임에 fx-rays가 따로 있음) -->
+<div class="sect">C. 폭발배경 없이 폰트+외곽선만 (게임에 이미 fx-rays 광선 있음)</div>
+<div class="grid2">
+  <div class="card">
+    <span class="tag">C · 골드 · 배경X</span>
+    <div class="b lg gold-fill">30<span class="row2">연타!</span></div>
+  </div>
+  <div class="card">
+    <span class="tag">C · 말차 · 배경X</span>
+    <div class="b lg green-fill">30<span class="row2">연타!</span></div>
+  </div>
+</div>
+
+<!-- 실제 게임 흰 배경 위 -->
+<div class="sect">D. 실제 게임(흰 배경) 위 — 폭발배경 포함</div>
+<div class="grid2">
+  <div class="card">
+    <span class="tag">D · 골드 (흰배경)</span>
+    <div class="burst gold"></div>
+    <div class="b md gold-fill"><span class="fire">🔥</span><br>50 COMBO!</div>
+  </div>
+  <div class="card">
+    <span class="tag">D · 말차 (흰배경)</span>
+    <div class="burst green"></div>
+    <div class="b md green-fill"><span class="fire">🔥</span><br>50 COMBO!</div>
+  </div>
+</div>
+
+</body>
+</html>
