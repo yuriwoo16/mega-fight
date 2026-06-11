@@ -555,10 +555,12 @@ const app = {
 
       <div class="battle-fighters">
         <div class="bf a ${mine === 'A' ? 'mine' : ''}">
+          <div class="speech">${A.bubble}</div>
           ${this.picture(A, '')}
         </div>
         <div class="battle-vs">VS</div>
         <div class="bf b ${mine === 'B' ? 'mine' : ''}">
+          <div class="speech">${B.bubble}</div>
           ${this.picture(B, '')}
         </div>
       </div>
