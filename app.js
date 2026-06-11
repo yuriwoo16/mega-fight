@@ -91,8 +91,8 @@ const app = {
     this.stopCheer();
     const team = C.teams[teamKey];
     const base = team.cheers || [];
-    const statusWin  = '이기고 있어요! 🔥';
-    const statusLose = '곧 따라 잡아요! 💪';
+    const statusWin  = '이기고\n있어요! 🔥';
+    const statusLose = '곧 따라\n잡아요! 💪';
     const statusTie  = '막상막하예요! ⚡';
     this.cheerIdx = 0;
 
@@ -555,12 +555,12 @@ const app = {
 
       <div class="battle-fighters">
         <div class="bf a ${mine === 'A' ? 'mine' : ''}">
-          <div class="speech">${A.bubble}</div>
+          ${mine === 'A' ? `<div class="speech" id="cheerBubble">${team.faction} 파이팅!</div>` : ''}
           ${this.picture(A, '')}
         </div>
         <div class="battle-vs">VS</div>
         <div class="bf b ${mine === 'B' ? 'mine' : ''}">
-          <div class="speech">${B.bubble}</div>
+          ${mine === 'B' ? `<div class="speech" id="cheerBubble">${team.faction} 파이팅!</div>` : ''}
           ${this.picture(B, '')}
         </div>
       </div>
@@ -583,7 +583,6 @@ const app = {
       </div>
 
       <div class="tap-area">
-        <div class="tap-speech" id="cheerBubble" style="--cheer-color:${team.color};--cheer-color-dark:${team.colorDark}">${team.faction} 파이팅!</div>
         <button class="tap-button" id="tapBtn"
           style="background:linear-gradient(135deg,${team.color},${team.colorDark})">
           <span class="big">${team.faction} 응원!</span>
