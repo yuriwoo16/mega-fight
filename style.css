@@ -65,7 +65,7 @@ html, body {
 .screen { min-height: 100vh; display: flex; flex-direction: column; animation: fadeSlide 0.3s cubic-bezier(0.16,1,0.3,1); }
 /* 인트로: .hero 배경 제거 시 부모에서 그라데이션 (device-frame 흰 배경 위에 덮음) */
 .screen.intro-screen {
-  height: 1000px;
+  height: auto;
   background: linear-gradient(180deg, rgba(244, 193, 66, 0.3) 22%, rgba(250, 250, 250, 0.3) 33%, rgba(250, 250, 250, 1) 51%, rgba(250, 250, 250, 1) 96%);
 }
 @keyframes fadeSlide { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
