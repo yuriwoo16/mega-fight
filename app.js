@@ -12,6 +12,8 @@ const app = {
   lastTapTime: 0,
   comboTimer: null,
   heatTimer: null,
+  cheerTimer: null,
+  cheerIdx: 0,
 
   init() {
     this.engine = initGameEngine(C);
@@ -26,12 +28,14 @@ const app = {
     this.combo = 0;
     clearTimeout(this.heatTimer);
     this.render();
+    this.startCheer(teamKey);
     this.loop();
   },
   goResult() {
     this.engine.stopRealtimeSimulation();
     cancelAnimationFrame(this.rafId);
     clearTimeout(this.heatTimer);
+    this.stopCheer();
     this.screen = 'result';
     this.render();
   },
@@ -78,12 +82,48 @@ const app = {
     if (segB) segB.style.width = rb + '%';
     this.setText('myCount', s.userTapCount.toLocaleString('ko-KR'));
 
-    // 실시간 1위 뱃지
-    const r1a = document.getElementById('rank1A'), r1b = document.getElementById('rank1B');
-    if (r1a && r1b) { r1a.style.display = a >= b ? '' : 'none'; r1b.style.display = a >= b ? 'none' : ''; }
   },
 
   setText(id, v) { const e = document.getElementById(id); if (e) e.textContent = v; },
+
+  // ==================== 응원 말풍선 ====================
+  startCheer(teamKey) {
+    this.stopCheer();
+    const team = C.teams[teamKey];
+    const base = team.cheers || [];
+    const statusWin  = '이기고 있어요! 🔥';
+    const statusLose = '곧 따라 잡아요! 💪';
+    const statusTie  = '막상막하예요! ⚡';
+    this.cheerIdx = 0;
+
+    const rotate = () => {
+      const el = document.getElementById('cheerBubble');
+      if (!el) return;
+      let msg;
+      if (this.cheerIdx % 3 === 2) {
+        const s = this.engine.getGameState();
+        const mine = teamKey === 'A' ? s.teamACount : s.teamBCount;
+        const opp  = teamKey === 'A' ? s.teamBCount : s.teamACount;
+        msg = mine > opp ? statusWin : mine < opp ? statusLose : statusTie;
+      } else {
+        msg = base[Math.floor(this.cheerIdx / 3 * 2 + this.cheerIdx % 3) % base.length];
+      }
+      el.classList.add('cheer-fade');
+      setTimeout(() => {
+        const el2 = document.getElementById('cheerBubble');
+        if (!el2) return;
+        el2.textContent = msg;
+        el2.classList.remove('cheer-fade');
+      }, 280);
+      this.cheerIdx++;
+    };
+
+    rotate();
+    this.cheerTimer = setInterval(rotate, 2500);
+  },
+  stopCheer() {
+    if (this.cheerTimer) { clearInterval(this.cheerTimer); this.cheerTimer = null; }
+  },
 
   // ==================== 연타 ====================
   onTap(ev) {
@@ -515,12 +555,10 @@ const app = {
 
       <div class="battle-fighters">
         <div class="bf a ${mine === 'A' ? 'mine' : ''}">
-          <span class="rank1" id="rank1A" style="display:none">1위</span>
           ${this.picture(A, '')}
         </div>
         <div class="battle-vs">VS</div>
         <div class="bf b ${mine === 'B' ? 'mine' : ''}">
-          <span class="rank1" id="rank1B" style="display:none">1위</span>
           ${this.picture(B, '')}
         </div>
       </div>
@@ -543,6 +581,7 @@ const app = {
       </div>
 
       <div class="tap-area">
+        <div class="tap-speech" id="cheerBubble" style="--cheer-color:${team.color};--cheer-color-dark:${team.colorDark}">${team.faction} 파이팅!</div>
         <button class="tap-button" id="tapBtn"
           style="background:linear-gradient(135deg,${team.color},${team.colorDark})">
           <span class="big">${team.faction} 응원!</span>

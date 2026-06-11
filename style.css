@@ -327,12 +327,6 @@ html, body {
 .bf.mine img { box-shadow: 0 0 0 3px #fff, 0 8px 22px rgba(43,41,92,0.22); border-color: currentColor; }
 .bf.a.mine { color: var(--teamA); }
 .bf.b.mine { color: var(--teamB); }
-.bf .rank1 {
-  position: absolute; top: -8px;
-  background: var(--magenta); color: #fff; font-size: 9px; font-weight: 800;
-  padding: 3px 7px; border-radius: 999px; z-index: 3;
-}
-#rank1A { visibility: hidden; }
 .battle-vs { font-size: 16px; font-weight: 900; color: var(--gray-3); }
 .bf.bump { animation: bump 0.25s ease; }
 @keyframes bump { 0%{transform:translateY(0)} 40%{transform:translateY(-10px) scale(1.05)} 100%{transform:translateY(0)} }
@@ -366,8 +360,38 @@ html, body {
 .combo-badge { display: inline-block; font-size: 13px; font-weight: 900; color: #fff; padding: 3px 12px; border-radius: 999px; margin-top: 3px; opacity: 0; transform: scale(0.8); }
 .combo-badge.show { opacity: 1; transform: scale(1); transition: all 0.15s; }
 
+/* 배틀 화면 응원 말풍선 */
+.tap-area {
+  padding: 6px 18px 16px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.tap-speech {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--cheer-color, var(--teamA)), var(--cheer-color-dark, var(--teamA-dark)));
+  color: #fff;
+  font-size: 15px; font-weight: 800;
+  padding: 10px 22px;
+  border-radius: 20px;
+  position: relative;
+  transition: opacity 0.28s ease;
+  letter-spacing: -0.01em;
+}
+.tap-speech::after {
+  content: '';
+  position: absolute;
+  bottom: -9px; left: 50%;
+  transform: translateX(-50%);
+  border: 9px solid transparent;
+  border-top-color: var(--cheer-color-dark, var(--teamA-dark));
+  border-bottom: 0;
+}
+.tap-speech.cheer-fade { opacity: 0; }
+
 /* 탭 버튼 */
-.tap-area { padding: 6px 18px 16px; position: relative; }
 .tap-button {
   width: 100%; border: none; border-radius: var(--radius); padding: 22px;
   color: #fff; cursor: pointer; box-shadow: var(--shadow-btn);
