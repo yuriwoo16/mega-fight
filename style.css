@@ -298,11 +298,36 @@ html, body {
 
 /* ==================== BATTLE ==================== */
 .battle-screen { background: #fff; position: relative; }
-.battle-screen .logo-bar { margin-bottom: 16px; }
+.battle-screen .logo-bar { margin-bottom: 8px; }
+
+.battle-hero-strip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 56px;
+  padding: 0 18px;
+  overflow: hidden;
+  background-color: rgba(244, 193, 66, 0.2);
+  color: rgba(244, 193, 66, 1);
+}
+.battle-hero-logo {
+  height: fit-content;
+  width: 54px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.battle-hero-question {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 1);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  white-space: nowrap;
+}
 
 .battle-title {
   text-align: center;
-  padding: 36px 18px 30px;
+  padding: 30px 18px 30px;
   font-size: 20px;
   font-weight: 700;
   color: var(--ink);
@@ -438,6 +463,16 @@ html, body {
   visibility: hidden;
 }
 .battle-cashback .pt { color: var(--magenta); }
+
+.battle-rewards-panel {
+  margin-top: 0;
+  box-sizing: content-box;
+  padding: 20px 0 28px;
+  background-color: rgba(247, 247, 247, 1);
+}
+.battle-rewards-panel .rewards-section {
+  margin-bottom: 0;
+}
 
 .floater { position: absolute; font-weight: 900; pointer-events: none; z-index: 30; animation: floatUp 0.9s cubic-bezier(0.16,1,0.3,1) forwards; }
 @keyframes floatUp { 0%{opacity:1;transform:translateY(0) scale(0.6)} 30%{transform:translateY(-20px) scale(1.3)} 100%{opacity:0;transform:translateY(-90px) scale(1)} }

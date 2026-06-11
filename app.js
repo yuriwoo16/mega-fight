@@ -455,6 +455,38 @@ const app = {
     </picture>`;
   },
 
+  rewardsSectionHTML() {
+    return `
+      <div class="rewards-section">
+        <span class="benefit-badge">혜택 1</span>
+        <div class="rewards-head" style="font-weight: 800; font-size: 18px; line-height: 1.4;">메가 취향전<br>우승 팀에게 드려요</div>
+        ${C.rewards.filter(r => r.kind === 'win').map((r) => `
+          <div class="reward-card ${r.kind}">
+            <div class="reward-left">
+              <div class="reward-sub">${r.sub}</div>
+              <div class="reward-big">${r.big}</div>
+            </div>
+            <div class="reward-ticket">
+              <div class="ticket-top">${r.ticketTop}</div>
+              <div class="ticket-mid">${r.ticketMid}</div>
+            </div>
+          </div>`).join('')}
+        <span class="benefit-badge">혜택 2</span>
+        <div class="rewards-head" style="font-weight: 800; font-size: 18px; line-height: 1.4;">참여만 해도<br>럭키드로우 응모 완료!</div>
+        ${C.rewards.filter(r => r.kind === 'lucky').map((r) => `
+          <div class="reward-card ${r.kind}">
+            <div class="reward-left">
+              <div class="reward-sub">${r.sub}</div>
+              <div class="reward-big">${r.big}</div>
+            </div>
+            <div class="reward-ticket">
+              <div class="ticket-top">${r.ticketTop}</div>
+              <div class="ticket-mid">${r.ticketMid}</div>
+            </div>
+          </div>`).join('')}
+      </div>`;
+  },
+
   // ==================== INTRO ====================
   introHTML() {
     const A = C.teams.A, B = C.teams.B;
@@ -500,34 +532,7 @@ const app = {
         </div>
       </div>
 
-      <div class="rewards-section">
-        <span class="benefit-badge">혜택 1</span>
-        <div class="rewards-head" style="font-weight: 800; font-size: 18px; line-height: 1.4;">메가 취향전<br>우승 팀에게 드려요</div>
-        ${C.rewards.filter(r => r.kind === 'win').map((r) => `
-          <div class="reward-card ${r.kind}">
-            <div class="reward-left">
-              <div class="reward-sub">${r.sub}</div>
-              <div class="reward-big">${r.big}</div>
-            </div>
-            <div class="reward-ticket">
-              <div class="ticket-top">${r.ticketTop}</div>
-              <div class="ticket-mid">${r.ticketMid}</div>
-            </div>
-          </div>`).join('')}
-        <span class="benefit-badge">혜택 2</span>
-        <div class="rewards-head" style="font-weight: 800; font-size: 18px; line-height: 1.4;">참여만 해도<br>럭키드로우 응모 완료!</div>
-        ${C.rewards.filter(r => r.kind === 'lucky').map((r) => `
-          <div class="reward-card ${r.kind}">
-            <div class="reward-left">
-              <div class="reward-sub">${r.sub}</div>
-              <div class="reward-big">${r.big}</div>
-            </div>
-            <div class="reward-ticket">
-              <div class="ticket-top">${r.ticketTop}</div>
-              <div class="ticket-mid">${r.ticketMid}</div>
-            </div>
-          </div>`).join('')}
-      </div>
+      ${this.rewardsSectionHTML()}
 
     </div>`;
   },
@@ -547,6 +552,11 @@ const app = {
         <span class="x-sep">×</span>
         <img src="${C.logoRight}" class="logo logo-mega" alt="메가MGC커피">
         <span class="period">${C.period}</span>
+      </div>
+
+      <div class="battle-hero-strip">
+        <img class="battle-hero-logo" src="img/tit.png" alt="${C.title}">
+        <span class="battle-hero-question">[메가 취향전] 당신의 메가 파르페 취향은?</span>
       </div>
 
       <div class="battle-title">
@@ -594,10 +604,8 @@ const app = {
         우승 진영 전원 4,900원 공구 쿠폰 + 럭키 <span class="pt">1,000명</span> 기프티콘
       </div>
 
-      <div class="timer-box">
-        <div class="lab">라운드 종료까지</div>
-        <div class="time" id="time">1:00</div>
-        <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
+      <div class="battle-rewards-panel">
+        ${this.rewardsSectionHTML()}
       </div>
 
     </div>`;
