@@ -57,7 +57,8 @@ html, body {
   background: #fff;
   position: relative;
   box-shadow: 0 0 60px rgba(0,0,0,0.3);
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 #screen { min-height: 100vh; }
