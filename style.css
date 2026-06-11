@@ -39,7 +39,7 @@
   --shadow-btn: 0 8px 22px rgba(43,41,92,0.18);
 }
 
-* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; touch-action: manipulation; }
 
 html, body {
   font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
