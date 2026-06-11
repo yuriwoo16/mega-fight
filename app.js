@@ -236,10 +236,16 @@ const app = {
       setTimeout(() => ring.remove(), 1000 + i * 150);
     }
 
-    // 펀치 배너
+    // 펀치 배너 — 135° 팀 색상 그라데이션 (숫자 앞=진한, 텍스트 뒤=밝은)
     const banner = document.createElement('div');
     banner.className = 'fx-banner ' + tier;
-    banner.textContent = big ? `🔥 ${count} COMBO!` : `${count} 연타!`;
+    banner.style.setProperty('--bd', team.gradDark);
+    banner.style.setProperty('--bm', team.color);
+    banner.style.setProperty('--bl', team.gradLight);
+    // 🔥 이모지는 텍스트 노드로 자연색 유지, 숫자+텍스트만 .txt span에 그라데이션
+    banner.innerHTML = big
+      ? `🔥 <span class="txt">${count} COMBO!</span>`
+      : `<span class="txt">${count} 연타!</span>`;
     layer.appendChild(banner);
     setTimeout(() => banner.remove(), 1000);
 
@@ -330,7 +336,7 @@ const app = {
       img.className = 'fx-pop';
       img.src = src;
       img.alt = '';
-      const sz = size * (0.7 + Math.random() * 0.6);
+      const sz = size * (0.3 + Math.random() * 1.0);
       img.style.width = img.style.height = sz + 'px';
       img.style.left = cx + 'px';
       img.style.top = cy + 'px';
@@ -354,7 +360,7 @@ const app = {
       img.className = 'fx-leaf';
       img.src = src;
       img.alt = '';
-      const sz = size * (0.7 + Math.random() * 0.7);
+      const sz = size * (0.35 + Math.random() * 1.05);
       img.style.width = img.style.height = sz + 'px';
       img.style.left = cx + 'px';
       img.style.top = cy + 'px';
@@ -387,7 +393,7 @@ const app = {
       img.className = 'fx-confetti-img';
       img.src = src;
       img.alt = '';
-      const sz = 18 + Math.random() * 20;
+      const sz = 8 + Math.random() * 30;
       img.style.width = img.style.height = sz + 'px';
       img.style.left = Math.random() * 100 + '%';
       img.style.animationDuration = (1.4 + Math.random() * 1.3) + 's';

@@ -429,26 +429,37 @@ html, body {
 .fx-ring.big { border-width: 9px; box-shadow: 0 0 24px currentColor; animation-duration: 0.85s; }
 @keyframes fxRing { to { transform: scale(7); opacity: 0; } }
 
-/* 펀치 배너 텍스트 */
+/* 펀치 배너 텍스트 — 🔥 이모지는 자연색, .txt 부분만 135° 팀 색상 그라데이션 */
+/* --bd: 진한 팀색(숫자 쪽), --bm: 기본 팀색, --bl: 밝은 팀색(텍스트 쪽) */
 .fx-banner {
   position: absolute; left: 50%; top: 42%;
   transform: translate(-50%,-50%) scale(0.2);
-  font-weight: 900; letter-spacing: -0.04em; white-space: nowrap;
+  display: inline-block;
+  font-family: 'Pretendard', -apple-system, sans-serif; font-weight: 900;
+  letter-spacing: -0.02em; white-space: nowrap;
   text-align: center; opacity: 0;
-  color: #111;
-  -webkit-text-stroke: 2px #fff;
-  paint-order: stroke fill;
-  text-shadow: 0 6px 0 rgba(0,0,0,0.10), 0 10px 26px rgba(0,0,0,0.28);
-  animation: fxBanner 0.95s cubic-bezier(0.16,1.5,0.3,1) forwards;
+  filter: drop-shadow(0 2px 0 color-mix(in srgb, var(--bd) 55%, transparent))
+          drop-shadow(0 6px 14px rgba(0,0,0,0.22));
+  animation: fxBanner 1s cubic-bezier(0.34,1.45,0.64,1) forwards;
 }
-.fx-banner.medium { font-size: 36px; }
-.fx-banner.big { font-size: 64px; -webkit-text-stroke-width: 3px; }
+/* 숫자+텍스트 부분만 그라데이션 — 이모지 텍스트 노드는 건드리지 않음 */
+.fx-banner .txt {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--bd) 0%, var(--bm) 45%, var(--bl) 100%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.fx-banner.medium { font-size: 44px; }
+.fx-banner.big { font-size: 64px; }
+/* 뒷 화면이 비치도록 최대 오파시티 0.85 */
 @keyframes fxBanner {
-  0%   { opacity: 0; transform: translate(-50%,-50%) scale(0.2) rotate(-10deg); }
-  25%  { opacity: 1; transform: translate(-50%,-50%) scale(1.18) rotate(3deg); }
-  45%  { transform: translate(-50%,-50%) scale(1) rotate(0); }
-  78%  { opacity: 1; }
-  100% { opacity: 0; transform: translate(-50%,-62%) scale(1.06); }
+  0%   { opacity: 0; transform: translate(-50%,-50%) scale(0.2) rotate(-14deg); }
+  22%  { opacity: 0.85; transform: translate(-50%,-50%) scale(1.22) rotate(1deg); }
+  40%  { transform: translate(-50%,-50%) scale(0.96) rotate(-4deg); }
+  52%  { transform: translate(-50%,-50%) scale(1.03) rotate(-3deg); }
+  62%  { transform: translate(-50%,-50%) scale(1) rotate(-3deg); }
+  80%  { opacity: 0.85; }
+  100% { opacity: 0; transform: translate(-50%,-66%) scale(1.08) rotate(-3deg); }
 }
 
 /* 화면 컬러 플래시 */
